@@ -44,7 +44,7 @@ function HomePage() {
       <Marquee />
       <About />
       <WorkWithMe />
-      {/* <Manifesto /> */}
+      <Manifesto />
       <Testimonials />
       <CTA />
       <Footer />
