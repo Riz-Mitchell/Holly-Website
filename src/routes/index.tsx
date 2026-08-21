@@ -71,7 +71,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Holly Winkels — Entrepreneur & Founder",
+        content: "Holly Winkels — Entrepreneur & Investor",
       },
       {
         property: "og:description",
