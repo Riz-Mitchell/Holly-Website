@@ -214,6 +214,12 @@
   .animate-marquee {
     animation: marquee 40s linear infinite;
   }
+  /* Faster loop on phones — 40s reads as sluggish on a narrow, tap-first screen. */
+  @media (max-width: 1023px) {
+    .animate-marquee {
+      animation-duration: 18s;
+    }
+  }
 
   /* Subtle reveal */
   @keyframes rise {

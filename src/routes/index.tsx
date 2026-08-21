@@ -162,7 +162,7 @@ function Hero() {
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-8">
             Entrepreneur · Investor · Athlete
           </p>
-          <h1 className="font-display text-[clamp(3rem,12vw,4rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight">
+          <h1 className="font-display text-[clamp(3.25rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight">
             <AnimatedText
               baseDelay={0.1}
               stagger={0.2}
@@ -176,7 +176,7 @@ function Hero() {
             />
           </h1>
           {/* <p
-            className="fade-in mt-10 w-full max-w-sm text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed"
+            className="fade-in mt-10 w-full max-w-sm text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed"
             style={{ transitionDelay: "4.0s" }}
           >
             Holly Winkels is a 20-year old entrepreneur from Melbourne
@@ -303,7 +303,7 @@ function About() {
             — About
           </p>
           <h2
-            className="fade-in font-display text-[clamp(2rem,8vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+            className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
             style={{ transitionDelay: "0.1s" }}
           >
             Create a life
@@ -313,7 +313,7 @@ function About() {
             <em className="text-brand">meaningful.</em>
           </h2>
           <div
-            className="fade-in space-y-6 w-full max-w-xl text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10"
+            className="fade-in space-y-6 w-full max-w-xl text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
             style={{ transitionDelay: "0.25s" }}
           >
             <p>
@@ -370,7 +370,7 @@ function WorkWithMe() {
               — Work With Me
             </p>
             <h2
-              className="fade-in font-display text-[clamp(2rem,8vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+              className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
               style={{ transitionDelay: "0.1s" }}
             >
               Three ways
@@ -378,7 +378,7 @@ function WorkWithMe() {
               we can <em className="text-brand">work together.</em>
             </h2>
             <p
-              className="fade-in space-y-6 w-full max-w-sm text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10"
+              className="fade-in space-y-6 w-full max-w-sm text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
               style={{ transitionDelay: "0.25s" }}
             >
               Everything I do is built on the same belief: your business will
@@ -408,7 +408,7 @@ function WorkWithMe() {
                   <p className="font-display text-6xl text-brand group-hover:text-brand-foreground transition-colors">
                     {s.no}
                   </p>
-                  <h3 className="font-display text-3xl mt-6 mb-4 group-hover:text-brand-foreground transition-colors">
+                  <h3 className="font-display text-[2rem] lg:text-3xl mt-6 mb-4 group-hover:text-brand-foreground transition-colors">
                     {s.title}
                   </h3>
                   <p className="text-foreground/70 group-hover:text-brand-foreground/90 leading-relaxed transition-colors">
@@ -456,7 +456,7 @@ const AUTOPLAY_MS = 10000;
 function QuoteCard({ t }: { t: Quote }) {
   return (
     <figure className="flex h-full flex-col border-t border-foreground/20 pt-8">
-      <blockquote className="font-display text-2xl leading-snug flex-1">
+      <blockquote className="font-display text-[1.75rem] lg:text-2xl leading-snug flex-1">
         <span className="text-brand text-4xl leading-none mr-1">"</span>
         {t.q}
         <span className="text-brand text-4xl leading-none mr-1">"</span>
@@ -630,7 +630,7 @@ function Testimonials() {
           — Stories
         </p>
         <h2
-          className="fade-in font-display text-[clamp(2rem,8vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+          className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
           What founders
@@ -671,13 +671,13 @@ function CTA() {
           — Contact Me
         </p>
         <h2
-          className="fade-in font-display text-[clamp(2rem,8vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-[0.9] tracking-tight"
+          className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-[0.9] tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
           Get in touch
         </h2>
         <p
-          className="fade-in w-full max-w-md text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10 opacity-90"
+          className="fade-in w-full max-w-md text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10 opacity-90"
           style={{ transitionDelay: "0.25s" }}
         >
           Tell me about your company, what you're building, or any ideas you
