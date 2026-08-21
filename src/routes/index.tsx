@@ -712,7 +712,7 @@ function Footer() {
     <footer className="border-t border-foreground/10 py-12 pb-[calc(3rem_+_env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <p className="font-display text-2xl">Holly Winkels</p>
-        <p className="text-xs uppercase tracking-[0.18em] text-foreground/50">
+        <p className="text-xs uppercase tracking-[0.18em] text-foreground/50 text-center">
           © {new Date().getFullYear()} Holly Winkels. All rights reserved.
         </p>
         <div className="flex gap-6 text-xs uppercase tracking-[0.18em] text-foreground/70">
