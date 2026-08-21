@@ -120,14 +120,23 @@ function Header() {
         <a href="#top" className="font-display text-xl tracking-tight">
           Holly Winkels
         </a>
-        <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.18em] text-foreground/70">
-          <a href="#about" className="hover:text-foreground transition">
+        <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.18em] text-foreground/70 [--underline-trim:0.18em]">
+          <a
+            href="#about"
+            className="link-underline hover:text-foreground transition"
+          >
             About
           </a>
-          <a href="#work" className="hover:text-foreground transition">
+          <a
+            href="#work"
+            className="link-underline hover:text-foreground transition"
+          >
             Work With Me
           </a>
-          <a href="#testimonials" className="hover:text-foreground transition">
+          <a
+            href="#testimonials"
+            className="link-underline hover:text-foreground transition"
+          >
             Stories
           </a>
         </nav>
@@ -146,7 +155,7 @@ function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-screen flex items-center pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
+      className="relative min-h-[95vh] flex items-center pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-7 animate-rise">
@@ -270,7 +279,7 @@ function About() {
   return (
     <section
       id="about"
-      className="min-h-screen flex py-28 lg:py-40 items-center"
+      className="min-h-[95vh] flex py-28 lg:py-40 items-center"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 items-center">
         <div className="fade-in lg:col-span-5">
@@ -297,7 +306,10 @@ function About() {
             <br />
             <em className="text-brand">meaningful.</em>
           </h2>
-          <div className="space-y-6 w-full max-w-xl text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10">
+          <div
+            className="fade-in space-y-6 w-full max-w-xl text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10"
+            style={{ transitionDelay: "0.25s" }}
+          >
             <p>
               {/* My focus is simple: growth, learning and building a legacy over
               time. I've gained hands-on experience working within a family
@@ -359,7 +371,10 @@ function WorkWithMe() {
               <br />
               we can <em className="text-brand">work together.</em>
             </h2>
-            <p className="space-y-6 w-full max-w-sm text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10">
+            <p
+              className="fade-in space-y-6 w-full max-w-sm text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10"
+              style={{ transitionDelay: "0.25s" }}
+            >
               Everything I do is built on the same belief: your business will
               only ever be as bold as you are.
             </p>
@@ -376,68 +391,35 @@ function WorkWithMe() {
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-px bg-foreground/10">
-          {services.map((s) => (
+          {services.map((s, i) => (
             <div
               key={s.no}
-              className="bg-background p-10 lg:p-12 group hover:bg-brand transition-colors duration-500 flex flex-col justify-between h-full"
+              className="fade-in"
+              style={{ transitionDelay: `${0.1 + i * 0.15}s` }}
             >
-              <div>
-                <p className="font-display text-6xl text-brand group-hover:text-brand-foreground transition-colors">
-                  {s.no}
-                </p>
-                <h3 className="font-display text-3xl mt-6 mb-4 group-hover:text-brand-foreground transition-colors">
-                  {s.title}
-                </h3>
-                <p className="text-foreground/70 group-hover:text-brand-foreground/90 leading-relaxed transition-colors">
-                  {s.desc}
-                </p>
+              <div className="bg-background p-10 lg:p-12 group hover:bg-brand transition-colors duration-500 flex flex-col justify-between h-full">
+                <div>
+                  <p className="font-display text-6xl text-brand group-hover:text-brand-foreground transition-colors">
+                    {s.no}
+                  </p>
+                  <h3 className="font-display text-3xl mt-6 mb-4 group-hover:text-brand-foreground transition-colors">
+                    {s.title}
+                  </h3>
+                  <p className="text-foreground/70 group-hover:text-brand-foreground/90 leading-relaxed transition-colors">
+                    {s.desc}
+                  </p>
+                </div>
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-1 w-fit mt-8 text-xs uppercase tracking-[0.18em] border-b border-foreground/40 pb-1 group-hover:border-brand-foreground group-hover:text-brand-foreground transition-colors"
+                >
+                  Enquire
+                  <RightArrowSvg width={12} height={12} />
+                </a>
               </div>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-1 w-fit mt-8 text-xs uppercase tracking-[0.18em] border-b border-foreground/40 pb-1 group-hover:border-brand-foreground group-hover:text-brand-foreground transition-colors"
-              >
-                Enquire
-                <RightArrowSvg width={12} height={12} />
-              </a>
             </div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-function Manifesto() {
-  return (
-    <section id="manifesto" className="relative py-32 lg:py-48 overflow-hidden">
-      <div className="absolute inset-0">
-        <img
-          src={stageImg}
-          alt=""
-          loading="lazy"
-          width={1280}
-          height={896}
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />
-      </div>
-      <div className="relative mx-auto max-w-5xl px-6 lg:px-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-brand-soft mb-8">
-          — Manifesto
-        </p>
-        <p className="font-display text-3xl lg:text-5xl leading-[1.15] text-white">
-          I don't believe in <em className="text-brand-soft">hustle</em>. I
-          believe in conviction.
-          <br />I don't believe in <em className="text-brand-soft">hacks</em>. I
-          believe in craft.
-          <br />I don't believe in{" "}
-          <em className="text-brand-soft">personal brands</em>.<br />I believe
-          in people who are{" "}
-          <span className="underline decoration-brand-soft decoration-4 underline-offset-8">
-            unmistakably themselves
-          </span>{" "}
-          — and then build the business to match.
-        </p>
       </div>
     </section>
   );
@@ -465,7 +447,7 @@ function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="min-h-screen flex py-28 lg:py-40 border-t border-foreground/10"
+      className="min-h-[95vh] flex py-28 lg:py-40 border-t border-foreground/10"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
@@ -480,12 +462,12 @@ function Testimonials() {
           <em className="text-brand">are saying.</em>
         </h2>
 
-        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 mt-10">
+        <div className="grid lg:grid-cols-3 gap-x-8 gap-y-16 lg:gap-12 mt-10">
           {quotes.map((t, i) => (
             <figure
               key={i}
               className="fade-in flex flex-col border-t border-foreground/20 pt-8"
-              style={{ transitionDelay: `${i * 0.15}s` }}
+              style={{ transitionDelay: `${0.25 + i * 0.15}s` }}
             >
               <blockquote className="font-display text-2xl leading-snug flex-1">
                 <span className="text-brand text-4xl leading-none mr-1">"</span>
@@ -520,27 +502,32 @@ function CTA() {
         >
           Get in touch
         </h2>
-        <p className="w-full max-w-md text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10 opacity-90">
+        <p
+          className="fade-in w-full max-w-md text-[clamp(12px,3vw,16px)] text-foreground/70 leading-relaxed mt-10 opacity-90"
+          style={{ transitionDelay: "0.25s" }}
+        >
           Tell me about your company, what you're building, or any ideas you
           want to explore. I'm always open to connecting with ambitious
           founders, entrepreneurs, and teams looking to make a difference.
         </p>
-        <a
-          href="mailto:contact@hollywinkels.com"
-          className="inline-flex items-center gap-3 mt-12 bg-foreground text-background px-10 py-5 text-sm uppercase tracking-[0.18em] hover:opacity-60 transition duration-200"
-        >
-          contact@hollywinkels.com
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            className="inline-block"
-            fill="currentColor"
-            viewBox="0 0 256 256"
+        <div className="fade-in" style={{ transitionDelay: "0.4s" }}>
+          <a
+            href="mailto:contact@hollywinkels.com"
+            className="mt-12 flex w-full flex-wrap items-center justify-center gap-2 bg-foreground px-4 py-5 text-xs uppercase tracking-[0.08em] text-background transition duration-200 hover:opacity-60 sm:inline-flex sm:w-auto sm:flex-nowrap sm:gap-3 sm:px-10 sm:text-sm sm:tracking-[0.18em]"
           >
-            <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"></path>
-          </svg>
-        </a>
+            contact@hollywinkels.com
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              className="inline-block"
+              fill="currentColor"
+              viewBox="0 0 256 256"
+            >
+              <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"></path>
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
   );
