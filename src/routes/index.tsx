@@ -5,7 +5,7 @@ import workImg from "@/assets/holly-work.jpeg";
 import workImg2 from "@/assets/holly-work-2.jpeg";
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TextSegment =
   | { type: "text"; content: string; pause?: number }
@@ -115,7 +115,7 @@ function HomePage() {
 
 function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/10 backdrop-blur-md bg-background/70">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/10 bg-background pt-[env(safe-area-inset-top)] lg:bg-background/70 lg:backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 h-16 flex items-center justify-between">
         <a href="#top" className="font-display text-xl tracking-tight">
           Holly Winkels
@@ -155,7 +155,7 @@ function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-[95vh] flex items-center pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
+      className="relative min-h-[95vh] flex items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-7 animate-rise">
@@ -249,20 +249,26 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-const marqueeItems = shuffle([
+const marqueeItems = [
   "Young Entrepreneur",
   "Farm Kid",
   "Deal Dome Speaker",
   "Inspiring The Next Generation",
   "2× Exit",
   "Investor",
-]);
+];
 
 function Marquee() {
+  // Shuffle after mount only. Randomising at module scope gave the server and
+  // the browser different orders, which threw a hydration error and killed
+  // interactivity for the whole page.
+  const [items, setItems] = useState(marqueeItems);
+  useEffect(() => setItems(shuffle(marqueeItems)), []);
+
   return (
     <section className="border-y border-foreground/10 py-6 overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
-        {[...marqueeItems, ...marqueeItems].map((item, i) => (
+        {[...items, ...items].map((item, i) => (
           <span
             key={i}
             className="font-display text-2xl px-32 text-foreground/70 inline-flex items-center"
@@ -425,31 +431,201 @@ function WorkWithMe() {
   );
 }
 
-function Testimonials() {
-  const quotes = [
-    {
-      q: "Holly approaches business the way great athletes approach competition with intensity, focus, and zero quit. Her energy alone will push you further than you thought possible.",
-      n: "Riley Mitchell",
-      r: "Founder, Swim Rebase",
-    },
-    {
-      q: "Twelve weeks with Holly was worth more than two years of advisors, accelerators and books combined. She tells you the truth, kindly.",
-      n: "David Okonkwo",
-      r: "CEO, Relay Health",
-    },
-    {
-      q: "I came in burned out and ready to sell. I left with the clearest vision of my company I've ever had. We tripled revenue in nine months.",
-      n: "Sasha Reilly",
-      r: "Founder, Ground & Co.",
-    },
-  ];
+type Quote = { q: string; n: string; r: string };
 
+const quotes: Quote[] = [
+  {
+    q: "Holly approaches business the way great athletes approach competition with intensity, focus, and zero quit. Her energy alone will push you further than you thought possible.",
+    n: "Riley Mitchell",
+    r: "Founder, Swim Rebase",
+  },
+  {
+    q: "Twelve weeks with Holly was worth more than two years of advisors, accelerators and books combined. She tells you the truth, kindly.",
+    n: "David Okonkwo",
+    r: "CEO, Relay Health",
+  },
+  {
+    q: "I came in burned out and ready to sell. I left with the clearest vision of my company I've ever had. We tripled revenue in nine months.",
+    n: "Sasha Reilly",
+    r: "Founder, Ground & Co.",
+  },
+];
+
+const AUTOPLAY_MS = 10000;
+
+function QuoteCard({ t }: { t: Quote }) {
+  return (
+    <figure className="flex h-full flex-col border-t border-foreground/20 pt-8">
+      <blockquote className="font-display text-2xl leading-snug flex-1">
+        <span className="text-brand text-4xl leading-none mr-1">"</span>
+        {t.q}
+        <span className="text-brand text-4xl leading-none mr-1">"</span>
+      </blockquote>
+      <figcaption className="mt-8 pt-6 border-t border-foreground/10">
+        <p className="text-sm uppercase tracking-[0.18em]">{t.n}</p>
+        <p className="text-sm text-foreground/60 mt-1">{t.r}</p>
+      </figcaption>
+    </figure>
+  );
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduced(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return reduced;
+}
+
+function QuoteCarousel({ items }: { items: Quote[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const animatingRef = useRef(false);
+  const [index, setIndex] = useState(0);
+  const [inView, setInView] = useState(true);
+  const reduced = usePrefersReducedMotion();
+
+  // `index` is the single source of truth. The autoplay timer advances it, a
+  // swipe reports back into it, and the track scroll position follows it.
+  useEffect(() => {
+    if (!inView || reduced) return;
+    const id = setTimeout(
+      () => setIndex((i) => (i + 1) % items.length),
+      AUTOPLAY_MS,
+    );
+    return () => clearTimeout(id);
+  }, [index, inView, reduced, items.length]);
+
+  // Bring the track to whatever slide `index` names. No-ops when the user
+  // swiped there themselves, so a swipe never fights its own animation.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || !el.clientWidth) return;
+    const to = index * el.clientWidth;
+    if (Math.abs(el.scrollLeft - to) < 2) return;
+
+    if (reduced || document.hidden) {
+      el.scrollLeft = to;
+      return;
+    }
+
+    // Hand the animation to the browser. Driving scrollLeft per frame pins the
+    // motion to the main thread and visibly stutters on iOS; the native smooth
+    // scroll is composited and cooperates with scroll snapping on its own.
+    animatingRef.current = true;
+    el.scrollTo({ left: to, behavior: "smooth" });
+
+    // There is no widely supported completion event, so release the guard once
+    // the position settles, with a ceiling that also covers browsers where
+    // smooth scrolling is a no-op.
+    let poll = 0;
+    const done = () => {
+      clearInterval(poll);
+      clearTimeout(ceiling);
+      animatingRef.current = false;
+    };
+    poll = window.setInterval(() => {
+      if (Math.abs(el.scrollLeft - to) < 2) done();
+    }, 100);
+    const ceiling = window.setTimeout(() => {
+      if (Math.abs(el.scrollLeft - to) >= 2) el.scrollLeft = to;
+      done();
+    }, 1500);
+
+    return done;
+  }, [index, reduced]);
+
+  // Swipes: read the settled position back into `index`. Ignored mid-animation,
+  // otherwise our own scrolling would drag the index backwards.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (animatingRef.current || !el.clientWidth) return;
+      const next = Math.round(el.scrollLeft / el.clientWidth);
+      setIndex((prev) => (prev === next ? prev : next));
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Don't rotate while off screen. Defaults to running so a browser that never
+  // reports intersection leaves the carousel working rather than frozen.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={rootRef} className="lg:hidden">
+      <div
+        ref={trackRef}
+        className="no-scrollbar -mx-6 flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain"
+        aria-label="Founder testimonials"
+      >
+        {items.map((t, i) => (
+          <div key={i} className="w-full shrink-0 snap-center px-6">
+            <QuoteCard t={t} />
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-10 flex items-center justify-center gap-2">
+        {items.map((_, i) => {
+          const active = i === index;
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setIndex(i)}
+              aria-label={`Show testimonial ${i + 1} of ${items.length}`}
+              aria-current={active ? "true" : undefined}
+              className="p-2"
+            >
+              <span
+                className={`block h-2 overflow-hidden rounded-full bg-foreground/20 transition-[width] duration-500 ease-out ${
+                  active ? "w-8" : "w-2"
+                }`}
+              >
+                {active &&
+                  (reduced ? (
+                    <span className="block h-full w-full rounded-full bg-foreground" />
+                  ) : (
+                    <span
+                      key={index}
+                      className="animate-dot-fill block h-full w-full rounded-full bg-foreground"
+                      style={{
+                        animationDuration: `${AUTOPLAY_MS}ms`,
+                        animationPlayState: inView ? "running" : "paused",
+                      }}
+                    />
+                  ))}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function Testimonials() {
   return (
     <section
       id="testimonials"
       className="min-h-[95vh] flex py-28 lg:py-40 border-t border-foreground/10"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
         <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
           — Stories
         </p>
@@ -462,23 +638,21 @@ function Testimonials() {
           <em className="text-brand">are saying.</em>
         </h2>
 
-        <div className="grid lg:grid-cols-3 gap-x-8 gap-y-16 lg:gap-12 mt-10">
+        {/* Mobile + tablet: auto-advancing swipe carousel */}
+        <div className="fade-in mt-10" style={{ transitionDelay: "0.25s" }}>
+          <QuoteCarousel items={quotes} />
+        </div>
+
+        {/* Desktop: unchanged three-column grid */}
+        <div className="mt-10 hidden gap-12 lg:grid lg:grid-cols-3">
           {quotes.map((t, i) => (
-            <figure
+            <div
               key={i}
-              className="fade-in flex flex-col border-t border-foreground/20 pt-8"
+              className="fade-in"
               style={{ transitionDelay: `${0.25 + i * 0.15}s` }}
             >
-              <blockquote className="font-display text-2xl leading-snug flex-1">
-                <span className="text-brand text-4xl leading-none mr-1">"</span>
-                {t.q}
-                <span className="text-brand text-4xl leading-none mr-1">"</span>
-              </blockquote>
-              <figcaption className="mt-8 pt-6 border-t border-foreground/10">
-                <p className="text-sm uppercase tracking-[0.18em]">{t.n}</p>
-                <p className="text-sm text-foreground/60 mt-1">{t.r}</p>
-              </figcaption>
-            </figure>
+              <QuoteCard t={t} />
+            </div>
           ))}
         </div>
       </div>
@@ -535,7 +709,7 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-foreground/10 py-12">
+    <footer className="border-t border-foreground/10 py-12 pb-[calc(3rem_+_env(safe-area-inset-bottom))]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <p className="font-display text-2xl">Holly Winkels</p>
         <p className="text-xs uppercase tracking-[0.18em] text-foreground/50">

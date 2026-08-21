@@ -176,6 +176,32 @@
     }
   }
 
+  /* Horizontal snap carousel (mobile quote slider) */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Progress sweep inside the active carousel dot.
+     Duration is set inline so it always matches the autoplay timer. */
+  @keyframes dot-fill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .animate-dot-fill {
+    transform-origin: left;
+    animation-name: dot-fill;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
   /* Marquee */
   @keyframes marquee {
     from {
