@@ -63,7 +63,7 @@ function AnimatedText({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Holly Winkels — Entrepreneur & Founder" },
+      { title: "Holly Winkels — Entrepreneur & Investor" },
       {
         name: "description",
         content:
