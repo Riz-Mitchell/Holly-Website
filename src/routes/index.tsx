@@ -483,22 +483,22 @@ function usePrefersReducedMotion() {
 
 function QuoteCarousel({ items }: { items: Quote[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
   const animatingRef = useRef(false);
   const [index, setIndex] = useState(0);
-  const [inView, setInView] = useState(true);
   const reduced = usePrefersReducedMotion();
 
   // `index` is the single source of truth. The autoplay timer advances it, a
   // swipe reports back into it, and the track scroll position follows it.
+  // Keeps running even while scrolled out of view, by design — pausing there
+  // made it visually jarring to come back to a frozen slide.
   useEffect(() => {
-    if (!inView || reduced) return;
+    if (reduced) return;
     const id = setTimeout(
       () => setIndex((i) => (i + 1) % items.length),
       AUTOPLAY_MS,
     );
     return () => clearTimeout(id);
-  }, [index, inView, reduced, items.length]);
+  }, [index, reduced, items.length]);
 
   // Bring the track to whatever slide `index` names. No-ops when the user
   // swiped there themselves, so a swipe never fights its own animation.
@@ -553,21 +553,8 @@ function QuoteCarousel({ items }: { items: Quote[] }) {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Don't rotate while off screen. Defaults to running so a browser that never
-  // reports intersection leaves the carousel working rather than frozen.
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.4 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <div ref={rootRef} className="lg:hidden">
+    <div className="lg:hidden">
       <div
         ref={trackRef}
         className="no-scrollbar -mx-6 flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain"
@@ -606,7 +593,7 @@ function QuoteCarousel({ items }: { items: Quote[] }) {
                       className="animate-dot-fill block h-full w-full rounded-full bg-foreground"
                       style={{
                         animationDuration: `${AUTOPLAY_MS}ms`,
-                        animationPlayState: inView ? "running" : "paused",
+                        animationPlayState: "running",
                       }}
                     />
                   ))}
