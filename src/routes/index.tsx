@@ -334,7 +334,7 @@ function WorkWithMe() {
     {
       no: "01",
       title: "Acquisitions",
-      desc: "I'm actively seeking opportunities to acquire established businesses with strong foundations and clear potential for operational improvement, growth, and long term value creation.",
+      desc: "I'm currently looking to acquire established businesses with strong foundations, great people and opportunities for growth.",
     },
     {
       no: "02",
@@ -344,7 +344,7 @@ function WorkWithMe() {
     {
       no: "03",
       title: "Speaking and Media",
-      desc: "Collaborations, media features, and brand opportunities that align with entrepreneurship, business growth, and inspiring for the next generation.",
+      desc: "Collaborations, media and speaking opportunities across entrepreneurship business and sport.",
     },
   ];
 
@@ -363,17 +363,15 @@ function WorkWithMe() {
               className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
               style={{ transitionDelay: "0.1s" }}
             >
-              Three ways
-              <br />
-              we can <em className="text-brand">work together.</em>
+              Where I'm <em className="text-brand">focused</em>
             </h2>
-            <p
+            {/*<p
               className="fade-in space-y-6 w-full max-w-sm text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
               style={{ transitionDelay: "0.25s" }}
             >
               Everything I do is built on the same belief: your business will
               only ever be as bold as you are.
-            </p>
+            </p>*/}
           </div>
           <div className="lg:w-5/12">
             <img
