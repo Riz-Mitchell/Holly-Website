@@ -144,7 +144,7 @@ function Header() {
           href="#contact"
           className="text-xs uppercase tracking-[0.18em] px-4 py-2 bg-brand text-brand-foreground hover:opacity-60 transition duration-200"
         >
-          Contact Me
+          Contact
         </a>
       </div>
     </header>
@@ -162,19 +162,18 @@ function Hero() {
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-8">
             Entrepreneur · Investor · Athlete
           </p>
-          <h1 className="font-display text-[clamp(3.25rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight">
+          <h1 className="font-display text-[clamp(3.25rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight pb-4">
             <AnimatedText
               baseDelay={0.1}
               stagger={0.2}
               segments={[
-                { type: "text", content: "Build a" },
+                { type: "text", content: "Building the next" },
                 { type: "br" },
-                { type: "text", content: "business that" },
-                { type: "br" },
-                { type: "em", content: "matters.", pause: 1 },
+                { type: "em", content: "chapter", pause: 1 },
               ]}
             />
           </h1>
+          
           {/* <p
             className="fade-in mt-10 w-full max-w-sm text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed"
             style={{ transitionDelay: "4.0s" }}
@@ -185,9 +184,9 @@ function Hero() {
             <div className="fade-in" style={{ transitionDelay: "3.0s" }}>
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-3 bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:translate-x-1 transition-transform duration-500"
+                className="group inline-flex items-center gap-3 bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
               >
-                Work With Me
+                Let's Connect
                 <RightArrowSvg width={16} height={16} />
               </a>
             </div>
@@ -306,29 +305,20 @@ function About() {
             className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
             style={{ transitionDelay: "0.1s" }}
           >
-            Create a life
+            I chose a
             <br />
-            that feels
-            <br />
-            <em className="text-brand">meaningful.</em>
+            <em className="text-brand">different path.</em>
           </h2>
           <div
             className="fade-in space-y-6 w-full max-w-xl text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
             style={{ transitionDelay: "0.25s" }}
           >
             <p>
-              {/* My focus is simple: growth, learning and building a legacy over
-              time. I've gained hands-on experience working within a family
-              business while developing my own direction in entrepreneurship.
-              I'm now focused on scaling, acquisitions, and long-term
-              opportunities that create real impact, freedom, and fulfillment. */}
-              My focus is simple: growth, execution, and building meanigful
-              companies. I've partnered with multimillion-dollar businesses
-              overseeing strategy, operations and growth. Now I focus on
-              entrepreneurship, acquisitions and scaling companies for a real
-              impact.
+              I've never been particularly interested in doing things the usual way.
+              I left school, chose business over university and pursued swimming 
+              at a national level. Now I'm building businesses, exploring acquisitions 
+              and learning as I go.
             </p>
-            <p></p>
             {/* <p className="font-display italic text-2xl text-foreground">
               That's what I work on. The person, then the business.
             </p> */}
@@ -353,7 +343,7 @@ function WorkWithMe() {
     },
     {
       no: "03",
-      title: "Media Opportunities",
+      title: "Speaking and Media",
       desc: "Collaborations, media features, and brand opportunities that align with entrepreneurship, business growth, and inspiring for the next generation.",
     },
   ];
@@ -710,6 +700,14 @@ function Footer() {
             className="hover:text-brand transition"
           >
             Instagram
+          </a>
+          <a
+            href="https://www.instagram.com/holly.winkels/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-brand transition"
+          >
+            Facebook
           </a>
           <a
             href="https://www.linkedin.com/in/holly-winkels-930a1a360/"
