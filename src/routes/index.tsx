@@ -265,6 +265,15 @@ function About() {
               That's what I work on. The person, then the business.
             </p> */}
           </div>
+          <div className="fade-in mt-8" style={{ transitionDelay: "0.35s" }}>
+            <a
+              href="/about"
+              className="link-underline [--underline-trim:0.18em] inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-foreground/50 transition hover:text-foreground/80"
+            >
+              Read My Story
+              <RightArrowSvg width={12} height={12} />
+            </a>
+          </div>
         </div>
       </div>
     </section>

@@ -64,7 +64,7 @@ export function Footer() {
             Facebook
           </a>
           <a
-            href="https://www.linkedin.com/in/holly-winkels-930a1a360/"
+            href="https://www.facebook.com/hollywinkelsofficial"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-brand transition"
