@@ -256,10 +256,11 @@ function About() {
             style={{ transitionDelay: "0.25s" }}
           >
             <p>
-              I've never been particularly interested in doing things the usual
-              way. I left school, chose business over university and pursued
-              swimming at a national level. Now I'm building businesses,
-              exploring acquisitions and learning as I go.
+	            I've never been particularly interested in doing things the 
+              usual way. I left school, chose business over university and 
+              pursued swimming at a national level. Now I'm building 
+              businesses, exploring acquisitions and looking for opportunities 
+              to build and grow.
             </p>
             {/* <p className="font-display italic text-2xl text-foreground">
               That's what I work on. The person, then the business.
