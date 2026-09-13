@@ -52,9 +52,7 @@ function AboutPage() {
             className="fade-in font-display text-[clamp(2.75rem,13vw,4.25rem)] lg:text-[clamp(4rem,7vw,6.5rem)] leading-[0.95] tracking-tight max-w-4xl"
             style={{ transitionDelay: "0.1s" }}
           >
-            From the pool to
-            <br />
-            <em className="text-brand">the business.</em>
+            My <em className="text-brand">story</em>
           </h1>
         </div>
       </section>

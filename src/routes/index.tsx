@@ -104,7 +104,7 @@ function HomePage() {
 
       <Header />
       <Hero />
-      <Marquee />
+      <hr className="border-t border-foreground/10" />
       <About />
       <WorkWithMe />
       {/* <Manifesto /> */}
@@ -311,15 +311,8 @@ function WorkWithMe() {
             >
               Where I'm <em className="text-brand">focused</em>
             </h2>
-            {/*<p
-              className="fade-in space-y-6 w-full max-w-sm text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
-              style={{ transitionDelay: "0.25s" }}
-            >
-              Everything I do is built on the same belief: your business will
-              only ever be as bold as you are.
-            </p>*/}
           </div>
-          <div className="lg:w-5/12">
+          {/* <div className="lg:w-5/12">
             <img
               src={workImg2}
               alt="Holly Winkels working"
@@ -328,7 +321,7 @@ function WorkWithMe() {
               height={1024}
               className="w-full aspect-square object-cover"
             />
-          </div>
+          </div> */}
         </div>
         <div className="grid md:grid-cols-3 gap-px bg-foreground/10">
           {services.map((s, i) => (
