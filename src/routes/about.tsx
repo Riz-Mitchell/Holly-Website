@@ -4,9 +4,9 @@ import stageImg from "@/assets/holly-work-2.jpeg";
 import {
   Header,
   Footer,
-  RightArrowSvg,
   useFadeIn,
   GoogleFontsPreload,
+  CTA,
 } from "@/components/site-layout";
 
 export const Route = createFileRoute("/about")({
@@ -118,7 +118,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="border-t border-foreground/10">
+      {/* <section className="border-t border-foreground/10">
         <div className="mx-auto max-w-7xl">
           <img
             src={stageImg}
@@ -129,37 +129,9 @@ function AboutPage() {
             className="fade-in w-full aspect-video object-cover"
           />
         </div>
-      </section>
+      </section> */}
 
-      <section className="py-28 lg:py-40 border-t border-foreground/10 bg-brand text-brand-foreground">
-        <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] mb-8 opacity-80">
-            — Let's Talk
-          </p>
-          <h2
-            className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-[0.9] tracking-tight"
-            style={{ transitionDelay: "0.1s" }}
-          >
-            Building something?
-          </h2>
-          <p
-            className="fade-in w-full max-w-md mx-auto text-[clamp(15px,3.5vw,16px)] leading-relaxed mt-10 opacity-90"
-            style={{ transitionDelay: "0.25s" }}
-          >
-            I'm always open to connecting with ambitious founders,
-            entrepreneurs, and teams looking to make a difference.
-          </p>
-          <div className="fade-in mt-12" style={{ transitionDelay: "0.4s" }}>
-            <a
-              href="/#contact"
-              className="group inline-flex items-center gap-3 bg-foreground text-background px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
-            >
-              Get In Touch
-              <RightArrowSvg width={16} height={16} />
-            </a>
-          </div>
-        </div>
-      </section>
+      <CTA />
 
       <Footer />
     </div>
