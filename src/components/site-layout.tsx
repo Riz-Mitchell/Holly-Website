@@ -30,7 +30,7 @@ export function Header() {
             href="/#testimonials"
             className="link-underline hover:text-foreground transition"
           >
-            Stories
+            Testimonials
           </a>
         </nav>
         <a

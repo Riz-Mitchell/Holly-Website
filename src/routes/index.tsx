@@ -541,15 +541,13 @@ function Testimonials() {
     >
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
         <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
-          — Stories
+          — Testimonials
         </p>
         <h2
           className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
-          What they
-          <br />
-          <em className="text-brand">are saying.</em>
+          The <em className="text-brand">testimonials</em>
         </h2>
 
         {/* Mobile + tablet: auto-advancing swipe carousel */}

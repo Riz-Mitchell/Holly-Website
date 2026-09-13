@@ -75,14 +75,8 @@ function AboutPage() {
               className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6"
               style={{ transitionDelay: "0.15s" }}
             >
-              — My Journey
+              — Journey
             </p>
-            <h2
-              className="fade-in font-display text-[clamp(2.1rem,7vw,2.75rem)] lg:text-[clamp(2.75rem,3.2vw,3.75rem)] leading-tight tracking-tight mb-8"
-              style={{ transitionDelay: "0.2s" }}
-            >
-              Business and <em className="text-brand">sport.</em>
-            </h2>
             <div
               className="fade-in space-y-8 text-[clamp(15px,3.5vw,17px)] text-foreground/70 leading-relaxed max-w-2xl"
               style={{ transitionDelay: "0.3s" }}
