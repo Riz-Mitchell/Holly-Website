@@ -127,12 +127,12 @@ function Hero() {
           </p>
           <h1 className="font-display text-[clamp(3.25rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight pb-4">
             <AnimatedText
-              baseDelay={0.1}
-              stagger={0.2}
+              baseDelay={0}
+              stagger={0.1}
               segments={[
                 { type: "text", content: "Building the next" },
                 { type: "br" },
-                { type: "em", content: "chapter", pause: 1 },
+                { type: "em", content: "chapter", pause: 0.25 },
               ]}
             />
           </h1>
@@ -144,7 +144,7 @@ function Hero() {
             Holly Winkels is a 20-year old entrepreneur from Melbourne
           </p> */}
           <div className="mt-10 flex flex-wrap gap-4">
-            <div className="fade-in" style={{ transitionDelay: "3.0s" }}>
+            <div className="fade-in" style={{ transitionDelay: "1.5s" }}>
               <a
                 href="#contact"
                 className="group inline-flex items-center gap-3 bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
@@ -153,7 +153,7 @@ function Hero() {
                 <RightArrowSvg width={16} height={16} />
               </a>
             </div>
-            <div className="fade-in" style={{ transitionDelay: "3.4s" }}>
+            <div className="fade-in" style={{ transitionDelay: "1.75s" }}>
               <a
                 href="#about"
                 className="inline-flex items-center gap-3 border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
@@ -560,7 +560,7 @@ function Testimonials() {
           className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
-          What founders
+          What they
           <br />
           <em className="text-brand">are saying.</em>
         </h2>
