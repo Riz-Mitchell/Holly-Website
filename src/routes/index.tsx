@@ -547,7 +547,9 @@ function Testimonials() {
           className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
-          The <em className="text-brand">testimonials</em>
+          What
+          <br/> 
+          people are <em className="text-brand">saying</em>
         </h2>
 
         {/* Mobile + tablet: auto-advancing swipe carousel */}

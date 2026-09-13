@@ -9,12 +9,6 @@ export function Header() {
         </a>
         <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-[0.18em] text-foreground/70 [--underline-trim:0.18em]">
           <a
-            href="/"
-            className="link-underline hover:text-foreground transition"
-          >
-            Home
-          </a>
-          <a
             href="/about"
             className="link-underline hover:text-foreground transition"
           >

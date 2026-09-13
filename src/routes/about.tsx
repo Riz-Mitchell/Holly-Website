@@ -42,7 +42,7 @@ function AboutPage() {
       <GoogleFontsPreload />
 
       <Header />
-
+{/* 
       <section className="relative min-h-[70vh] flex items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-20 lg:pt-48 lg:pb-28 overflow-hidden">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
@@ -55,7 +55,7 @@ function AboutPage() {
             My <em className="text-brand">story</em>
           </h1>
         </div>
-      </section>
+      </section> */}
 
       <section className="py-20 lg:py-32 border-t border-foreground/10">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 items-start">
@@ -75,10 +75,16 @@ function AboutPage() {
               className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6"
               style={{ transitionDelay: "0.15s" }}
             >
-              — Journey
+              — About
             </p>
+            <h2
+              className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+              style={{ transitionDelay: "0.2s" }}
+            >
+              My <em className="text-brand">story</em>
+            </h2>
             <div
-              className="fade-in space-y-8 text-[clamp(15px,3.5vw,17px)] text-foreground/70 leading-relaxed max-w-2xl"
+              className="fade-in space-y-8 text-[clamp(15px,3.5vw,17px)] text-foreground/70 leading-relaxed max-w-2xl mt-10"
               style={{ transitionDelay: "0.3s" }}
             >
               <p>
