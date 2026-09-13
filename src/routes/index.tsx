@@ -108,7 +108,7 @@ function HomePage() {
       <About />
       <WorkWithMe />
       {/* <Manifesto /> */}
-      <Testimonials />
+      {/* <Testimonials /> */}
       <CTA />
       <Footer />
     </div>
@@ -251,7 +251,7 @@ function About() {
           >
             <p>
 	            I've never been particularly interested in doing things the 
-              usual way. I left school, chose business over university and 
+              usual way. When I finished school I chose business over university and 
               pursued swimming at a national level. Now I'm building 
               businesses, exploring acquisitions and looking for opportunities 
               to build and grow.
