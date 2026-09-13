@@ -2,12 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import hollyWithAChicken from "@/assets/HollyWithAChicken.jpeg";
 import swimmingPicture from "@/assets/SwimmingPicture.png";
-import hollyWorkingWithBeeFrames from "@/assets/HollyWorkingWithBeeFrames.jpeg";
 import hollyWorkingOnMoisturizer from "@/assets/HollyWorkingOnMoisturizer.jpeg";
-import hollyWithBeeHive from "@/assets/HollyWithWithTheBeeHive.jpeg";
-import hollyBuildingAHiveWithBrother from "@/assets/HollyBuildingAHiveWithBrother.jpeg";
 import hollyWithMentor from "@/assets/HollyWithMentor.jpeg";
-import hollyWorking from "@/assets/HollyWorking.jpeg";
 import {
   Header,
   Footer,
@@ -152,10 +148,11 @@ function AboutPage() {
       <StorySection
         image={swimmingPicture}
         alt="Holly competing in swimming"
-        caption="— The Pool"
+        caption="— The Pool & After School"
         heading={
           <>
-            Chasing <em className="text-brand">swimming</em>
+            Chasing swimming, choosing my own{" "}
+            <em className="text-brand">path</em>
           </>
         }
         reverse
@@ -167,18 +164,6 @@ function AboutPage() {
           open because, honestly, I had no idea what I wanted to do after
           school.
         </p>
-      </StorySection>
-
-      <StorySection
-        image={hollyWorkingWithBeeFrames}
-        alt="Holly working with bee frames"
-        caption="— After School"
-        heading={
-          <>
-            Choosing my own <em className="text-brand">path</em>
-          </>
-        }
-      >
         <p>
           I graduated Year 12 and decided not to go to university. I didn't
           want to spend years studying something I didn't actually enjoy
@@ -196,13 +181,12 @@ function AboutPage() {
       <StorySection
         image={hollyWorkingOnMoisturizer}
         alt="Holly working on a moisturizer product"
-        caption="— A Shift"
+        caption="— A Shift & Family First"
         heading={
           <>
-            Wanting <em className="text-brand">more</em>
+            Wanting more, stepping <em className="text-brand">up</em>
           </>
         }
-        reverse
       >
         <p>
           I also started working at Rebel Sport. I really enjoyed the people
@@ -215,18 +199,6 @@ function AboutPage() {
           more seriously about what was happening inside my own family's
           business and whether I could play a bigger role in it.
         </p>
-      </StorySection>
-
-      <StorySection
-        image={hollyWorking}
-        alt="Holly Working"
-        caption="— Family First"
-        heading={
-          <>
-            Stepping <em className="text-brand">up</em>
-          </>
-        }
-      >
         <p>
           Around the same time, my sister became unwell, and I could see how
           much of Mum's time and energy was being taken up supporting her. I
@@ -243,10 +215,11 @@ function AboutPage() {
         image={hollyWithMentor}
         alt="Holly with a mentor"
         imagePosition="object-top"
-        caption="— Learning To Build"
+        caption="— Learning To Build & What's Next"
         heading={
           <>
-            Finding my <em className="text-brand">mentors</em>
+            Finding my mentors, building my own{" "}
+            <em className="text-brand">chapter</em>
           </>
         }
         reverse
@@ -265,49 +238,30 @@ function AboutPage() {
           Helping take the business into its next chapter and creating more
           freedom for them has become a big part of what I do.
         </p>
+        <p>
+          But working in the family business also made me realise something
+          else: I want to build something of my own.
+        </p>
+        <p>
+          I'm continuing to help grow and transition the family business
+          while exploring opportunities to acquire an established business of
+          my own.
+        </p>
+        <p>I don't have every step mapped out.</p>
+        <p>
+          But somewhere along the way, I stopped worrying so much about
+          having the perfect plan and started paying attention to what I
+          actually enjoyed.
+        </p>
+        <p className="font-display italic text-2xl text-foreground">
+          And I realised I really love business.
+        </p>
+        <p className="font-display italic text-2xl text-foreground">
+          I wanted more then.
+          <br />
+          I still do.
+        </p>
       </StorySection>
-
-      <section className="py-28 lg:py-40 border-t border-foreground/10">
-        <div className="mx-auto max-w-2xl px-6 lg:px-10 text-center">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
-            — What's Next
-          </p>
-          <h2
-            className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
-            style={{ transitionDelay: "0.1s" }}
-          >
-            My own <em className="text-brand">chapter</em>
-          </h2>
-          <div
-            className="fade-in space-y-6 text-[clamp(15px,3.5vw,17px)] text-foreground/70 leading-relaxed mt-10"
-            style={{ transitionDelay: "0.25s" }}
-          >
-            <p>
-              But working in the family business also made me realise
-              something else: I want to build something of my own.
-            </p>
-            <p>
-              I'm continuing to help grow and transition the family business
-              while exploring opportunities to acquire an established
-              business of my own.
-            </p>
-            <p>I don't have every step mapped out.</p>
-            <p>
-              But somewhere along the way, I stopped worrying so much about
-              having the perfect plan and started paying attention to what I
-              actually enjoyed.
-            </p>
-            <p className="font-display italic text-2xl text-foreground">
-              And I realised I really love business.
-            </p>
-            <p className="font-display italic text-2xl text-foreground">
-              I wanted more then.
-              <br />
-              I still do.
-            </p>
-          </div>
-        </div>
-      </section>
 
       <CTA />
 
