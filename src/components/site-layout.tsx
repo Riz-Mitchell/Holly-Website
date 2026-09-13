@@ -62,7 +62,7 @@ export function Footer() {
             Instagram
           </a>
           <a
-            href="https://www.instagram.com/holly.winkels/"
+            href="https://www.facebook.com/hollywinkelsofficial"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-brand transition"
@@ -70,7 +70,7 @@ export function Footer() {
             Facebook
           </a>
           <a
-            href="https://www.facebook.com/hollywinkelsofficial"
+            href="https://www.linkedin.com/in/holly-winkels-930a1a360/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-brand transition"
