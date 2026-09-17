@@ -253,10 +253,10 @@ function AboutPage() {
           having the perfect plan and started paying attention to what I
           actually enjoyed.
         </p>
-        <p className="font-display italic text-2xl text-foreground">
+        <p>
           And I realised I really love business.
         </p>
-        <p className="font-display italic text-2xl text-foreground">
+        <p>
           I wanted more then.
           <br />
           I still do.

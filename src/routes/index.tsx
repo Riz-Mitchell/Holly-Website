@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroPortrait from "@/assets/holly-hero.webp";
-import heroPortraitV2 from "@/assets/holly-hero-v2.jpeg";
-import workImg from "@/assets/holly-work.jpeg";
-import workImg2 from "@/assets/holly-work-2.jpeg";
-import hollyWorking from "@/assets/HollyWorking.jpeg";
-import hollyBeeFrames from "@/assets/HollyWorkingWithBeeFrames.jpeg";
-import hollyBeehive from "@/assets/HollyWithWithTheBeeHive.jpeg";
-import hollyChicken from "@/assets/HollyWithAChicken.jpeg";
-import hollyMoisturizer from "@/assets/HollyWorkingOnMoisturizer.jpeg";
-import hollyBeehiveBrother from "@/assets/HollyBuildingAHiveWithBrother.jpeg";
-import hollyMentor from "@/assets/HollyWithMentor.jpeg";
-import hollySwimming from "@/assets/SwimmingPicture.png";
+import heroPortraitV2 from "@/assets/holly-hero-v2.webp";
+import workImg from "@/assets/holly-work.webp";
+import workImg2 from "@/assets/holly-work-2.webp";
+import hollyWorking from "@/assets/HollyWorking.webp";
+import hollyBeeFrames from "@/assets/HollyWorkingWithBeeFrames.webp";
+import hollyBeehive from "@/assets/HollyWithWithTheBeeHive.webp";
+import hollyChicken from "@/assets/HollyWithAChicken.webp";
+import hollyMoisturizer from "@/assets/HollyWorkingOnMoisturizer.webp";
+import hollyBeehiveBrother from "@/assets/HollyBuildingAHiveWithBrother.webp";
+import hollyMentor from "@/assets/HollyWithMentor.webp";
+import hollySwimming from "@/assets/SwimmingPicture.webp";
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
 import { useEffect, useRef, useState } from "react";
@@ -201,8 +201,12 @@ const carouselImages = [
 
 // Repeating the image list lets the track loop: once it has scrolled exactly
 // one repeat's width, the frame is pixel-identical to the start, so resetting
-// `offset` back to 0 (via modulo) never produces a visible jump.
-const CAROUSEL_REPEATS = 4;
+// `offset` back to 0 (via modulo) never produces a visible jump. 2 repeats is
+// the minimum for a seamless loop (the visible window only ever spans two
+// repeats at once, since one repeat's width comfortably exceeds any
+// viewport) — kept low because every extra repeat is a full extra decode of
+// these already-heavy source photos, which is what was costing mobile FPS.
+const CAROUSEL_REPEATS = 2;
 // Baseline drift speed, in pixels/second, when the page isn't being scrolled.
 const CAROUSEL_BASE_SPEED = 40;
 // How strongly page-scroll velocity boosts the carousel's speed.
@@ -292,6 +296,7 @@ function ImageCarousel() {
               alt={s === 0 ? img.alt : ""}
               aria-hidden={s === 0 ? undefined : true}
               loading={s === 0 ? "eager" : "lazy"}
+              decoding="async"
               className="h-64 sm:h-80 lg:h-[26rem] w-auto shrink-0 object-cover mx-1"
             />
           )),
