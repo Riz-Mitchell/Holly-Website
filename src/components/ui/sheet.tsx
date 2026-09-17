@@ -52,17 +52,31 @@ const sheetVariants = cva(
 interface SheetContentProps
   extends
     React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-    VariantProps<typeof sheetVariants> {}
+    VariantProps<typeof sheetVariants> {
+  // Lets a caller line the close button's icon up with a trigger elsewhere on
+  // the page (position/padding) and swap in a matching icon, instead of
+  // being stuck with the default top-4/right-4 lucide X.
+  closeClassName?: string;
+  closeIcon?: React.ReactNode;
+}
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, ...props }, ref) => (
+>(({ side = "right", className, children, closeClassName, closeIcon, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background cursor-pointer transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-        <X className="h-4 w-4" />
+      <SheetPrimitive.Close
+        className={cn(
+          // focus-visible (not focus) so the ring only shows for keyboard
+          // navigation, not on every mouse click — a plain click left a
+          // visible ring/border around the icon otherwise.
+          "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background cursor-pointer transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary",
+          closeClassName,
+        )}
+      >
+        {closeIcon ?? <X className="h-4 w-4" />}
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
       {children}
