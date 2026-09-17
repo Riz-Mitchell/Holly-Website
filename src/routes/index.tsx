@@ -1,7 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroPortrait from "@/assets/holly-hero.webp";
+import heroPortraitV2 from "@/assets/holly-hero-v2.jpeg";
 import workImg from "@/assets/holly-work.jpeg";
 import workImg2 from "@/assets/holly-work-2.jpeg";
+import hollyWorking from "@/assets/HollyWorking.jpeg";
+import hollyBeeFrames from "@/assets/HollyWorkingWithBeeFrames.jpeg";
+import hollyBeehive from "@/assets/HollyWithWithTheBeeHive.jpeg";
+import hollyChicken from "@/assets/HollyWithAChicken.jpeg";
+import hollyMoisturizer from "@/assets/HollyWorkingOnMoisturizer.jpeg";
+import hollyBeehiveBrother from "@/assets/HollyBuildingAHiveWithBrother.jpeg";
+import hollyMentor from "@/assets/HollyWithMentor.jpeg";
+import hollySwimming from "@/assets/SwimmingPicture.png";
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
 import { useEffect, useRef, useState } from "react";
@@ -99,12 +108,12 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   useFadeIn();
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <GoogleFontsPreload />
 
       <Header />
       <Hero />
-      <hr className="border-t border-foreground/10" />
+      <ImageCarousel />
       <About />
       <WorkWithMe />
       {/* <Manifesto /> */}
@@ -170,6 +179,123 @@ function Hero() {
             />
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+const carouselImages = [
+  { src: heroPortraitV2, alt: "Portrait of Holly Winkels" },
+  { src: hollyWorking, alt: "Holly Winkels at work" },
+  { src: hollyBeeFrames, alt: "Holly Winkels working with bee frames" },
+  { src: hollyBeehive, alt: "Holly Winkels with the bee hive" },
+  { src: hollyChicken, alt: "Holly Winkels with a chicken on the farm" },
+  { src: hollyMoisturizer, alt: "Holly Winkels working on moisturizer" },
+  {
+    src: hollyBeehiveBrother,
+    alt: "Holly Winkels building a beehive with her brother",
+  },
+  { src: hollyMentor, alt: "Holly Winkels with her mentor" },
+  { src: hollySwimming, alt: "Holly Winkels swimming competitively" },
+];
+
+// Repeating the image list lets the track loop: once it has scrolled exactly
+// one repeat's width, the frame is pixel-identical to the start, so resetting
+// `offset` back to 0 (via modulo) never produces a visible jump.
+const CAROUSEL_REPEATS = 4;
+// Baseline drift speed, in pixels/second, when the page isn't being scrolled.
+const CAROUSEL_BASE_SPEED = 40;
+// How strongly page-scroll velocity boosts the carousel's speed.
+const CAROUSEL_SCROLL_BOOST = 3.5;
+// Time constant (ms) over which a scroll-driven speed boost decays back to baseline.
+const CAROUSEL_BOOST_DECAY_MS = 350;
+
+function ImageCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (reduced || !track) return;
+
+    // One "period" is the width of a single repeat of the image list. The
+    // track is measured (not assumed) so it stays correct after images load
+    // and after any resize/orientation change.
+    let periodWidth = 0;
+    const measure = () => {
+      periodWidth = track.scrollWidth / CAROUSEL_REPEATS;
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(track);
+
+    let offset = 0;
+    let scrollVelocity = 0;
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = performance.now();
+
+    const onScroll = () => {
+      const now = performance.now();
+      const dt = now - lastScrollTime;
+      if (dt > 0) {
+        const instant = (Math.abs(window.scrollY - lastScrollY) / dt) * 100;
+        // Take the peak rather than the latest sample so a quick flick still
+        // registers, then let the per-frame decay below taper it off smoothly.
+        scrollVelocity = Math.max(scrollVelocity, instant);
+      }
+      lastScrollY = window.scrollY;
+      lastScrollTime = now;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    let last = performance.now();
+    let frameId = requestAnimationFrame(function tick(now) {
+      // Clamp dt so returning to a backgrounded tab can't produce one huge
+      // jump in the offset.
+      const dt = Math.min(now - last, 100);
+      last = now;
+
+      scrollVelocity *= Math.exp(-dt / CAROUSEL_BOOST_DECAY_MS);
+      const speed = CAROUSEL_BASE_SPEED + scrollVelocity * CAROUSEL_SCROLL_BOOST;
+
+      if (periodWidth > 0) {
+        // Wrapping `offset` itself (rather than letting it grow unbounded)
+        // is what keeps this stable indefinitely: the value driving the
+        // transform never grows past `periodWidth`, so there's no float
+        // precision drift no matter how long the page stays open.
+        offset = (offset + (speed * dt) / 1000) % periodWidth;
+        track.style.transform = `translate3d(${-offset}px,0,0)`;
+      }
+      frameId = requestAnimationFrame(tick);
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+    };
+  }, [reduced]);
+
+  const repeats = reduced ? 1 : CAROUSEL_REPEATS;
+
+  return (
+    <section
+      aria-label="Photos of Holly Winkels"
+      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-y border-foreground/10"
+    >
+      <div ref={trackRef} className="flex w-max will-change-transform">
+        {Array.from({ length: repeats }).map((_, s) =>
+          carouselImages.map((img, i) => (
+            <img
+              key={`${s}-${i}`}
+              src={img.src}
+              alt={s === 0 ? img.alt : ""}
+              aria-hidden={s === 0 ? undefined : true}
+              loading={s === 0 ? "eager" : "lazy"}
+              className="h-64 sm:h-80 lg:h-[26rem] w-auto shrink-0 object-cover mx-1"
+            />
+          )),
+        )}
       </div>
     </section>
   );
@@ -285,12 +411,12 @@ function WorkWithMe() {
     {
       no: "02",
       title: "Partnerships",
-      desc: "Open to strategic partnerships and opportunities across agriculture food manufacturing retail and wholesale.",
+      desc: "Open to strategic partnerships and opportunities across agriculture, food, manufacturing, retail and wholesale.",
     },
     {
       no: "03",
       title: "Speaking and Media",
-      desc: "Collaborations, media and speaking opportunities across entrepreneurship business and sport.",
+      desc: "Collaborations, media and speaking opportunities across entrepreneurship, business and sport.",
     },
   ];
 
