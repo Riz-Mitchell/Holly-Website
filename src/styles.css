@@ -51,9 +51,43 @@
 }
 
 :root {
+  /* ============================================================
+     Brand palette library.
+     Each palette below defines the same six roles. To switch the
+     active brand look, edit the "Active palette" block further down
+     so it points at a different --palette-<name>-* set — no other
+     changes needed anywhere else in the file/app.
+     ============================================================ */
+
+  /* Palette: forest-green (original) */
+  --palette-forest-green-brand: oklch(0.7395 0.058 155.23);
+  --palette-forest-green-brand-foreground: oklch(0.08 0 0);
+  --palette-forest-green-brand-strong: oklch(0.38 0.15 148);
+  --palette-forest-green-brand-soft: oklch(0.72 0.16 148);
+  --palette-forest-green-accent: oklch(0.52 0.17 148);
+  --palette-forest-green-ring: oklch(0.52 0.17 148);
+
+  /* Palette: earthy-teal (based on #2b8282) */
+  --palette-earthy-teal-brand: oklch(0.557 0.082 195); /* #2b8282 */
+  --palette-earthy-teal-brand-foreground: oklch(0.08 0 0);
+  --palette-earthy-teal-brand-strong: oklch(0.36 0.075 195);
+  --palette-earthy-teal-brand-soft: oklch(0.68 0.08 195);
+  --palette-earthy-teal-accent: oklch(0.48 0.08 195);
+  --palette-earthy-teal-ring: oklch(0.48 0.08 195);
+
+  /* Palette: ocean-blue (based on #3a9bb2) */
+  --palette-ocean-blue-brand: oklch(0.643 0.095 216); /* #3a9bb2 */
+  --palette-ocean-blue-brand-foreground: oklch(0.08 0 0);
+  --palette-ocean-blue-brand-strong: oklch(0.42 0.09 216);
+  --palette-ocean-blue-brand-soft: oklch(0.75 0.09 216);
+  --palette-ocean-blue-accent: oklch(0.55 0.09 216);
+  --palette-ocean-blue-ring: oklch(0.55 0.09 216);
+}
+
+:root {
   --radius: 0.25rem;
 
-  /* Brand palette: white base, black text, forest green accent */
+  /* Brand palette: white base, black text */
   --background: oklch(1 0 0);
   --foreground: oklch(0.08 0 0);
   --ink: oklch(0.08 0 0);
@@ -69,20 +103,21 @@
   --secondary-foreground: oklch(0.08 0 0);
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.35 0 0);
-  --accent: oklch(0.52 0.17 148);
-  --accent-foreground: oklch(0.08 0 0);
 
-  /* Rich forest green — deeper, more grounded, still crisp on white and dark */
-  --brand: oklch(0.7395 0.058 155.23); /* oklch(0.405 0.0564 174.64) */
-  --brand-foreground: oklch(0.08 0 0);
-  --brand-strong: oklch(0.38 0.15 148); /* darker shade for hover / on white */
-  --brand-soft: oklch(0.72 0.16 148); /* lighter shade for dark backgrounds */
+  /* ---- Active palette: change "ocean-blue" to "earthy-teal" / "forest-green"
+     (or a new palette added above) to swap the whole site's brand color. ---- */
+  --accent: var(--palette-ocean-blue-accent);
+  --accent-foreground: oklch(0.08 0 0);
+  --brand: var(--palette-ocean-blue-brand);
+  --brand-foreground: var(--palette-ocean-blue-brand-foreground);
+  --brand-strong: var(--palette-ocean-blue-brand-strong);
+  --brand-soft: var(--palette-ocean-blue-brand-soft);
+  --ring: var(--palette-ocean-blue-ring);
 
   --destructive: oklch(0.55 0.22 28);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0 0 0 / 12%);
   --input: oklch(0 0 0 / 15%);
-  --ring: oklch(0.52 0.17 148);
 }
 
 .dark {
