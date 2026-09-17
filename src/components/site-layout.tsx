@@ -154,7 +154,7 @@ export function CTA() {
         >
           Tell me about your company, what you're building, or any ideas you
           want to explore. I'm always open to connecting with ambitious
-          founders, entrepreneurs, and teams looking to make a difference.
+          founders, entrepreneurs, and people looking to make a difference.
         </p>
         <div className="fade-in" style={{ transitionDelay: "0.4s" }}>
           <a

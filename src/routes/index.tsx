@@ -150,7 +150,7 @@ function Hero() {
             </div>
             <div className="fade-in" style={{ transitionDelay: "1.75s" }}>
               <a
-                href="#about"
+                href="/about"
                 className="inline-flex items-center gap-3 border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
               >
                 My Story

@@ -137,7 +137,7 @@ function AboutPage() {
         }
       >
         <p>
-          I grew up on a bee farm on the Mornington Peninsula, surrounded by
+          I grew up on a farm on the Mornington Peninsula, surrounded by
           animals and a family business. Business was a normal part of my
           life growing up. I watched my parents build Pure Peninsula Honey
           from the ground up, but I never really thought it would become my
