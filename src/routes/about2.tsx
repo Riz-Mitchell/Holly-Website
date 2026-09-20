@@ -208,12 +208,13 @@ function StoryTimeline() {
         ref={stageRef}
         className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden"
       >
-        <div className="mx-auto flex h-full w-full max-w-4xl min-h-0 flex-col gap-5 px-6 py-6 lg:gap-8 lg:px-10 lg:py-10">
-          {/* Mobile: image on the left, vertical timeline on the right.
-              sm and up: horizontal timeline above the image. */}
-          <div className="flex h-[40svh] min-h-0 flex-none flex-row gap-8 sm:h-auto sm:flex-1 sm:flex-col sm:gap-8">
+        {/* Mobile: column of [image | vertical timeline] then text.
+            sm and up: column of [timeline, row of (text, image)]. */}
+        <div className="mx-auto flex h-full w-full max-w-7xl min-h-0 flex-col gap-5 px-6 py-6 sm:grid sm:grid-cols-2 sm:grid-rows-[auto_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-8 lg:gap-x-24 lg:px-10 lg:py-10">
+          {/* sm:contents lets the timeline and image join the grid above. */}
+          <div className="flex h-[40svh] min-h-0 flex-none flex-row gap-8 sm:contents">
           {/* Year indicator: every year visible, the current one emphasised. */}
-          <ol className="order-2 flex shrink-0 flex-col items-center font-display sm:order-1 sm:flex-row">
+          <ol className="order-2 flex shrink-0 flex-col items-center font-display sm:col-span-2 sm:row-start-1 sm:flex-row">
             {CHAPTERS.map((c, i) => (
               <Fragment key={c.year}>
                 <li>
@@ -221,8 +222,10 @@ function StoryTimeline() {
                     type="button"
                     onClick={() => goTo(i)}
                     aria-current={i === active ? "step" : undefined}
-                    className={`cursor-pointer text-base transition-colors duration-500 motion-reduce:transition-none sm:text-2xl ${
-                      i === active
+                    // Years already scrolled through (and the current one) are
+                    // brand-coloured; upcoming ones stay faded.
+                    className={`cursor-pointer text-lg transition-colors duration-500 motion-reduce:transition-none sm:text-3xl lg:text-4xl ${
+                      i <= active
                         ? "text-brand"
                         : "text-foreground/30 hover:text-foreground/60"
                     }`}
@@ -234,7 +237,7 @@ function StoryTimeline() {
                 {i < count - 1 && (
                   <li
                     aria-hidden
-                    className="my-2 min-h-4 w-[2px] flex-1 bg-foreground/15 sm:mx-5 sm:my-0 sm:h-[2px] sm:min-h-0 sm:w-auto"
+                    className="my-1.5 min-h-4 w-[2px] flex-1 bg-foreground/15 sm:mx-5 sm:my-0 sm:h-[2px] sm:min-h-0 sm:w-auto"
                   >
                     {/* --p (0..1) is set on scroll; it scales down the line on
                         mobile and along it from sm up. */}
@@ -252,7 +255,7 @@ function StoryTimeline() {
           </ol>
 
           {/* Image: one per year, cross-fading as the active year changes. */}
-          <div className="relative order-1 mx-auto min-h-0 min-w-0 flex-1 sm:order-2 sm:w-full sm:max-w-sm">
+          <div className="relative order-1 min-h-0 min-w-0 flex-1 sm:col-start-2 sm:row-start-2 sm:aspect-[4/5] sm:h-[80%] sm:w-auto sm:max-w-full sm:flex-none sm:self-center sm:justify-self-end">
             {CHAPTERS.map((c, i) => (
               <img
                 key={c.year}
@@ -272,7 +275,7 @@ function StoryTimeline() {
           {/* Text: layers share one grid cell so the block is as tall as the
               longest chapter and never jumps when swapping. Spacing matches the
               rest of the site (caption mb-6, paragraph mt-10). */}
-          <div className="grid shrink-0">
+          <div className="grid shrink-0 sm:col-start-1 sm:row-start-2 sm:self-center">
             {CHAPTERS.map((c, i) => (
               <div
                 key={c.year}
@@ -284,10 +287,10 @@ function StoryTimeline() {
                 <p className="mb-6 text-xs uppercase tracking-[0.3em] text-brand">
                   {c.caption}
                 </p>
-                <h2 className="font-display text-[clamp(1.75rem,7vw,2.5rem)] leading-none tracking-tight lg:text-[clamp(2.5rem,3.5vw,4rem)]">
+                <h2 className="font-display text-[clamp(1.75rem,7vw,2.5rem)] leading-none tracking-tight sm:text-[clamp(2.5rem,5vw,5rem)] lg:text-[clamp(3rem,5vw,5.5rem)]">
                   {c.heading}
                 </h2>
-                <div className="mt-10 max-w-xl space-y-6 text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70">
+                <div className="mt-10 max-w-xl space-y-6 text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:text-lg lg:text-xl">
                   {c.body.map((para, j) => (
                     <p key={j}>{para}</p>
                   ))}
@@ -309,7 +312,7 @@ function AboutPage() {
 
       <Header />
 
-      <section className="relative flex items-center justify-center text-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-16 lg:pt-48 lg:pb-20 overflow-hidden">
+      <section className="relative flex min-h-[80svh] items-center justify-center text-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-16 lg:pt-48 lg:pb-20 overflow-hidden">
         <div className="mx-auto max-w-4xl px-6 lg:px-10">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
             — About
