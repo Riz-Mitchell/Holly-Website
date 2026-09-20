@@ -170,7 +170,7 @@ function StoryTimeline() {
       segmentRefs.current.forEach((el, i) => {
         if (!el) return;
         const fill = Math.min(1, Math.max(0, progress * count - i));
-        el.style.transform = `scaleX(${fill})`;
+        el.style.setProperty("--p", String(fill));
       });
       setActive(Math.min(count - 1, Math.floor(progress * count)));
     };
@@ -209,8 +209,11 @@ function StoryTimeline() {
         className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden"
       >
         <div className="mx-auto flex h-full w-full max-w-4xl min-h-0 flex-col gap-5 px-6 py-6 lg:gap-8 lg:px-10 lg:py-10">
+          {/* Mobile: image on the left, vertical timeline on the right.
+              sm and up: horizontal timeline above the image. */}
+          <div className="flex h-[40svh] min-h-0 flex-none flex-row gap-8 sm:h-auto sm:flex-1 sm:flex-col sm:gap-8">
           {/* Year indicator: every year visible, the current one emphasised. */}
-          <ol className="flex shrink-0 items-center font-display">
+          <ol className="order-2 flex shrink-0 flex-col items-center font-display sm:order-1 sm:flex-row">
             {CHAPTERS.map((c, i) => (
               <Fragment key={c.year}>
                 <li>
@@ -231,14 +234,16 @@ function StoryTimeline() {
                 {i < count - 1 && (
                   <li
                     aria-hidden
-                    className="mx-1 h-[2px] flex-1 bg-foreground/15 sm:mx-5"
+                    className="my-2 min-h-4 w-[2px] flex-1 bg-foreground/15 sm:mx-5 sm:my-0 sm:h-[2px] sm:min-h-0 sm:w-auto"
                   >
+                    {/* --p (0..1) is set on scroll; it scales down the line on
+                        mobile and along it from sm up. */}
                     <div
                       ref={(el) => {
                         segmentRefs.current[i] = el;
                       }}
-                      className="h-full origin-left bg-brand will-change-transform"
-                      style={{ transform: "scaleX(0)" }}
+                      className="h-full w-full origin-top bg-brand will-change-transform [transform:scaleY(var(--p))] sm:origin-left sm:[transform:scaleX(var(--p))]"
+                      style={{ "--p": 0 } as React.CSSProperties}
                     />
                   </li>
                 )}
@@ -247,7 +252,7 @@ function StoryTimeline() {
           </ol>
 
           {/* Image: one per year, cross-fading as the active year changes. */}
-          <div className="relative mx-auto min-h-0 w-full max-w-sm flex-1">
+          <div className="relative order-1 mx-auto min-h-0 min-w-0 flex-1 sm:order-2 sm:w-full sm:max-w-sm">
             {CHAPTERS.map((c, i) => (
               <img
                 key={c.year}
@@ -261,6 +266,7 @@ function StoryTimeline() {
                 }`}
               />
             ))}
+          </div>
           </div>
 
           {/* Text: layers share one grid cell so the block is as tall as the
