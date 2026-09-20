@@ -63,7 +63,11 @@ function XSvg({
 // button's own -mr-2/p-2 cancelling out). The Sheet's close button mirrors
 // that exact construction — same padding, same math — so the icon lines up
 // in the same spot whether the menu is open or closed.
-const MOBILE_NAV_CLOSE_CLASSNAME = "top-[13px] right-4 rounded-none p-2";
+// No ring/outline in any focus state: Radix auto-focuses the close button when
+// the drawer opens, and some mobile browsers treat that programmatic focus as
+// :focus-visible, which drew a border around the icon.
+const MOBILE_NAV_CLOSE_CLASSNAME =
+  "top-[13px] right-4 rounded-none border-0 p-2 outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);

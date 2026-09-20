@@ -141,7 +141,6 @@ function Hero() {
               stagger={0.1}
               segments={[
                 { type: "text", content: "Building the next" },
-                { type: "br" },
                 { type: "em", content: "chapter", pause: 0.25 },
               ]}
             />
@@ -199,108 +198,193 @@ const carouselImages = [
   { src: hollySwimming, alt: "Holly Winkels swimming competitively" },
 ];
 
-// Repeating the image list lets the track loop: once it has scrolled exactly
-// one repeat's width, the frame is pixel-identical to the start, so resetting
-// `offset` back to 0 (via modulo) never produces a visible jump. 2 repeats is
-// the minimum for a seamless loop (the visible window only ever spans two
-// repeats at once, since one repeat's width comfortably exceeds any
-// viewport) — kept low because every extra repeat is a full extra decode of
-// these already-heavy source photos, which is what was costing mobile FPS.
-const CAROUSEL_REPEATS = 2;
-// Baseline drift speed, in pixels/second, when the page isn't being scrolled.
-const CAROUSEL_BASE_SPEED = 40;
-// How strongly page-scroll velocity boosts the carousel's speed.
-const CAROUSEL_SCROLL_BOOST = 3.5;
-// Time constant (ms) over which a scroll-driven speed boost decays back to baseline.
-const CAROUSEL_BOOST_DECAY_MS = 350;
+// Drag/swipe strip with spring physics. Position `x` is driven manually so we
+// can layer on: rubber-band resistance when pulled past either end, momentum
+// after release (velocity + friction), and a damped spring that pulls it back
+// to the edge when it has overshot. The rAF loop only runs while something is
+// moving, and it never moves on its own or in response to page scroll.
+const CAROUSEL_RUBBER = 0.4; // fraction of finger travel that applies past an edge
+const CAROUSEL_FRICTION = 3.2; // momentum decay rate (1/s)
+const CAROUSEL_SPRING_K = 170; // edge spring stiffness
+const CAROUSEL_SPRING_C = 2 * Math.sqrt(CAROUSEL_SPRING_K) * 0.85; // slightly underdamped
 
 function ImageCarousel() {
+  const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
+
+  const physics = useRef({
+    x: 0,
+    v: 0,
+    min: 0, // most-negative x (fully scrolled to the end)
+    dragging: false,
+    startPointerX: 0,
+    startX: 0,
+    lastPointerX: 0,
+    lastTime: 0,
+    frame: 0,
+    run: () => {},
+  });
 
   useEffect(() => {
+    const viewport = viewportRef.current;
     const track = trackRef.current;
-    if (reduced || !track) return;
+    if (!viewport || !track) return;
+    const p = physics.current;
 
-    // One "period" is the width of a single repeat of the image list. The
-    // track is measured (not assumed) so it stays correct after images load
-    // and after any resize/orientation change.
-    let periodWidth = 0;
+    const render = () => {
+      track.style.transform = `translate3d(${p.x}px,0,0)`;
+    };
     const measure = () => {
-      periodWidth = track.scrollWidth / CAROUSEL_REPEATS;
+      p.min = Math.min(0, viewport.clientWidth - track.scrollWidth);
+      if (!p.dragging && p.x < p.min) p.x = p.min;
+      render();
     };
     measure();
     const ro = new ResizeObserver(measure);
+    ro.observe(viewport);
     ro.observe(track);
 
-    let offset = 0;
-    let scrollVelocity = 0;
-    let lastScrollY = window.scrollY;
-    let lastScrollTime = performance.now();
-
-    const onScroll = () => {
-      const now = performance.now();
-      const dt = now - lastScrollTime;
-      if (dt > 0) {
-        const instant = (Math.abs(window.scrollY - lastScrollY) / dt) * 100;
-        // Take the peak rather than the latest sample so a quick flick still
-        // registers, then let the per-frame decay below taper it off smoothly.
-        scrollVelocity = Math.max(scrollVelocity, instant);
-      }
-      lastScrollY = window.scrollY;
-      lastScrollTime = now;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    let last = performance.now();
-    let frameId = requestAnimationFrame(function tick(now) {
-      // Clamp dt so returning to a backgrounded tab can't produce one huge
-      // jump in the offset.
-      const dt = Math.min(now - last, 100);
+    let last = 0;
+    const tick = (now: number) => {
+      const dt = Math.min((now - last) / 1000, 1 / 30);
       last = now;
-
-      scrollVelocity *= Math.exp(-dt / CAROUSEL_BOOST_DECAY_MS);
-      const speed = CAROUSEL_BASE_SPEED + scrollVelocity * CAROUSEL_SCROLL_BOOST;
-
-      if (periodWidth > 0) {
-        // Wrapping `offset` itself (rather than letting it grow unbounded)
-        // is what keeps this stable indefinitely: the value driving the
-        // transform never grows past `periodWidth`, so there's no float
-        // precision drift no matter how long the page stays open.
-        offset = (offset + (speed * dt) / 1000) % periodWidth;
-        track.style.transform = `translate3d(${-offset}px,0,0)`;
+      if (p.dragging) {
+        p.frame = 0;
+        return;
       }
-      frameId = requestAnimationFrame(tick);
-    });
+
+      const bound = p.x > 0 ? 0 : p.x < p.min ? p.min : null;
+      if (bound !== null) {
+        if (reducedRef.current) {
+          p.x = bound;
+          p.v = 0;
+        } else {
+          const a = -CAROUSEL_SPRING_K * (p.x - bound) - CAROUSEL_SPRING_C * p.v;
+          p.v += a * dt;
+          p.x += p.v * dt;
+        }
+      } else {
+        p.v *= Math.exp(-CAROUSEL_FRICTION * dt);
+        p.x += p.v * dt;
+      }
+      render();
+
+      const settled =
+        Math.abs(p.v) < 4 &&
+        (bound === null ? true : Math.abs(p.x - bound) < 0.3);
+      if (settled) {
+        if (bound !== null) p.x = bound;
+        p.v = 0;
+        render();
+        p.frame = 0;
+        return;
+      }
+      p.frame = requestAnimationFrame(tick);
+    };
+    p.run = () => {
+      if (p.frame) return;
+      last = performance.now();
+      p.frame = requestAnimationFrame(tick);
+    };
+
+    // Trackpad / horizontal wheel: nudge the strip; the loop springs it back
+    // if it goes past an edge. Vertical wheel is left alone so the page scrolls.
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      p.v = 0;
+      p.x -= e.deltaX;
+      p.x = Math.max(p.min - 80, Math.min(80, p.x));
+      render();
+      p.run();
+    };
+    viewport.addEventListener("wheel", onWheel, { passive: false });
 
     return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(p.frame);
+      p.frame = 0;
       ro.disconnect();
+      viewport.removeEventListener("wheel", onWheel);
     };
-  }, [reduced]);
+  }, []);
 
-  const repeats = reduced ? 1 : CAROUSEL_REPEATS;
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    const p = physics.current;
+    p.dragging = true;
+    p.v = 0;
+    p.startPointerX = p.lastPointerX = e.clientX;
+    p.startX = p.x;
+    p.lastTime = performance.now();
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const p = physics.current;
+    if (!p.dragging || !trackRef.current) return;
+    const now = performance.now();
+    const dtMs = now - p.lastTime;
+    if (dtMs > 0) {
+      // Smoothed release velocity in px/s.
+      const inst = ((e.clientX - p.lastPointerX) / dtMs) * 1000;
+      p.v = p.v * 0.6 + inst * 0.4;
+    }
+    p.lastPointerX = e.clientX;
+    p.lastTime = now;
+
+    const target = p.startX + (e.clientX - p.startPointerX);
+    // Resist (rubber-band) only the portion dragged past an edge.
+    p.x =
+      target > 0
+        ? target * CAROUSEL_RUBBER
+        : target < p.min
+          ? p.min + (target - p.min) * CAROUSEL_RUBBER
+          : target;
+    trackRef.current.style.transform = `translate3d(${p.x}px,0,0)`;
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const p = physics.current;
+    if (!p.dragging) return;
+    p.dragging = false;
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    // Holding still before letting go shouldn't fling.
+    if (performance.now() - p.lastTime > 80) p.v = 0;
+    if (reducedRef.current) p.v = 0;
+    p.run();
+  };
 
   return (
     <section
       aria-label="Photos of Holly Winkels"
-      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden border-y border-foreground/10"
+      className="w-full border-y border-foreground/10"
     >
-      <div ref={trackRef} className="flex w-max will-change-transform">
-        {Array.from({ length: repeats }).map((_, s) =>
-          carouselImages.map((img, i) => (
+      <div
+        ref={viewportRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className="cursor-grab touch-pan-y select-none overflow-clip active:cursor-grabbing"
+      >
+        <div ref={trackRef} className="flex w-max will-change-transform">
+          {carouselImages.map((img, i) => (
             <img
-              key={`${s}-${i}`}
+              key={i}
               src={img.src}
-              alt={s === 0 ? img.alt : ""}
-              aria-hidden={s === 0 ? undefined : true}
-              loading={s === 0 ? "eager" : "lazy"}
+              alt={img.alt}
+              draggable={false}
               decoding="async"
+              loading={i < 3 ? "eager" : "lazy"}
               className="h-64 sm:h-80 lg:h-[26rem] w-auto shrink-0 object-cover mx-1"
             />
-          )),
-        )}
+          ))}
+        </div>
       </div>
     </section>
   );
