@@ -141,6 +141,12 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Every photo on the site gets the same large rounding. Lives in the base
+     layer so a `rounded-*` utility on a specific image can still override it. */
+  img {
+    border-radius: 2rem;
+  }
+
   ::selection {
     background-color: var(--color-brand);
     color: var(--color-brand-foreground);

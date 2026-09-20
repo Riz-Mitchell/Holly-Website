@@ -93,7 +93,7 @@ export function Header() {
         {/* Desktop: Contact stays inline in the header. */}
         <a
           href="/#contact"
-          className="hidden md:inline-flex text-xs uppercase tracking-[0.18em] px-4 py-2 bg-brand text-brand-foreground hover:opacity-60 transition duration-200"
+          className="hidden md:inline-flex rounded-full text-xs uppercase tracking-[0.18em] px-4 py-2 bg-brand text-brand-foreground hover:opacity-60 transition duration-200"
         >
           Contact
         </a>
@@ -135,7 +135,7 @@ export function Header() {
               <a
                 href="/#contact"
                 onClick={() => setMenuOpen(false)}
-                className="flex w-full items-center justify-center bg-brand text-brand-foreground px-4 py-4 text-xs uppercase tracking-[0.18em] hover:opacity-60 transition duration-200"
+                className="flex w-full items-center justify-center rounded-full bg-brand text-brand-foreground px-4 py-4 text-xs uppercase tracking-[0.18em] hover:opacity-60 transition duration-200"
               >
                 Contact
               </a>
@@ -262,7 +262,7 @@ export function CTA() {
         <div className="fade-in" style={{ transitionDelay: "0.4s" }}>
           <a
             href="mailto:contact@hollywinkels.com"
-            className="mt-12 flex w-full flex-wrap items-center justify-center gap-2 bg-foreground px-4 py-5 text-xs uppercase tracking-[0.08em] text-background transition duration-200 hover:opacity-60 sm:inline-flex sm:w-auto sm:flex-nowrap sm:gap-3 sm:px-10 sm:text-sm sm:tracking-[0.18em]"
+            className="mt-12 flex w-full flex-wrap items-center justify-center gap-2 rounded-full bg-foreground px-4 py-5 text-xs uppercase tracking-[0.08em] text-background transition duration-200 hover:opacity-60 sm:inline-flex sm:w-auto sm:flex-nowrap sm:gap-3 sm:px-10 sm:text-sm sm:tracking-[0.18em]"
           >
             contact@hollywinkels.com
             <svg

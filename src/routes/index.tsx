@@ -1,16 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroPortrait from "@/assets/holly-hero.webp";
-import heroPortraitV2 from "@/assets/holly-hero-v2.webp";
 import workImg from "@/assets/holly-work.webp";
 import workImg2 from "@/assets/holly-work-2.webp";
-import hollyWorking from "@/assets/HollyWorking.webp";
-import hollyBeeFrames from "@/assets/HollyWorkingWithBeeFrames.webp";
-import hollyBeehive from "@/assets/HollyWithWithTheBeeHive.webp";
-import hollyChicken from "@/assets/HollyWithAChicken.webp";
-import hollyMoisturizer from "@/assets/HollyWorkingOnMoisturizer.webp";
-import hollyBeehiveBrother from "@/assets/HollyBuildingAHiveWithBrother.webp";
-import hollyMentor from "@/assets/HollyWithMentor.webp";
-import hollySwimming from "@/assets/SwimmingPicture.webp";
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
 import { useEffect, useRef, useState } from "react";
@@ -113,7 +104,7 @@ function HomePage() {
 
       <Header />
       <Hero />
-      <ImageCarousel />
+      <hr className="border-t border-foreground/10" />
       <About />
       <WorkWithMe />
       {/* <Manifesto /> */}
@@ -130,7 +121,7 @@ function Hero() {
       id="top"
       className="relative min-h-[95vh] flex items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 items-center">
+      <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 lg:gap-x-24 items-center">
         <div className="lg:col-span-7 animate-rise">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-8">
             Entrepreneur · Investor · Athlete
@@ -150,7 +141,7 @@ function Hero() {
             <div className="fade-in" style={{ transitionDelay: "1.5s" }}>
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-3 bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
+                className="group inline-flex items-center gap-3 rounded-full bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
               >
                 Let's Connect
                 <RightArrowSvg width={16} height={16} />
@@ -159,7 +150,7 @@ function Hero() {
             <div className="fade-in" style={{ transitionDelay: "1.75s" }}>
               <a
                 href="/about"
-                className="inline-flex items-center gap-3 border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
+                className="inline-flex items-center gap-3 rounded-full border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
               >
                 My Story
               </a>
@@ -177,213 +168,6 @@ function Hero() {
               className="w-3/4 h-auto object-cover contrast-110"
             />
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const carouselImages = [
-  { src: heroPortraitV2, alt: "Portrait of Holly Winkels" },
-  { src: hollyWorking, alt: "Holly Winkels at work" },
-  { src: hollyBeeFrames, alt: "Holly Winkels working with bee frames" },
-  { src: hollyBeehive, alt: "Holly Winkels with the bee hive" },
-  { src: hollyChicken, alt: "Holly Winkels with a chicken on the farm" },
-  { src: hollyMoisturizer, alt: "Holly Winkels working on moisturizer" },
-  {
-    src: hollyBeehiveBrother,
-    alt: "Holly Winkels building a beehive with her brother",
-  },
-  { src: hollyMentor, alt: "Holly Winkels with her mentor" },
-  { src: hollySwimming, alt: "Holly Winkels swimming competitively" },
-];
-
-// Drag/swipe strip with spring physics. Position `x` is driven manually so we
-// can layer on: rubber-band resistance when pulled past either end, momentum
-// after release (velocity + friction), and a damped spring that pulls it back
-// to the edge when it has overshot. The rAF loop only runs while something is
-// moving, and it never moves on its own or in response to page scroll.
-const CAROUSEL_RUBBER = 0.4; // fraction of finger travel that applies past an edge
-const CAROUSEL_FRICTION = 3.2; // momentum decay rate (1/s)
-const CAROUSEL_SPRING_K = 170; // edge spring stiffness
-const CAROUSEL_SPRING_C = 2 * Math.sqrt(CAROUSEL_SPRING_K) * 0.85; // slightly underdamped
-
-function ImageCarousel() {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const reduced = usePrefersReducedMotion();
-  const reducedRef = useRef(reduced);
-  reducedRef.current = reduced;
-
-  const physics = useRef({
-    x: 0,
-    v: 0,
-    min: 0, // most-negative x (fully scrolled to the end)
-    dragging: false,
-    startPointerX: 0,
-    startX: 0,
-    lastPointerX: 0,
-    lastTime: 0,
-    frame: 0,
-    run: () => {},
-  });
-
-  useEffect(() => {
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-    if (!viewport || !track) return;
-    const p = physics.current;
-
-    const render = () => {
-      track.style.transform = `translate3d(${p.x}px,0,0)`;
-    };
-    const measure = () => {
-      p.min = Math.min(0, viewport.clientWidth - track.scrollWidth);
-      if (!p.dragging && p.x < p.min) p.x = p.min;
-      render();
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(viewport);
-    ro.observe(track);
-
-    let last = 0;
-    const tick = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 1 / 30);
-      last = now;
-      if (p.dragging) {
-        p.frame = 0;
-        return;
-      }
-
-      const bound = p.x > 0 ? 0 : p.x < p.min ? p.min : null;
-      if (bound !== null) {
-        if (reducedRef.current) {
-          p.x = bound;
-          p.v = 0;
-        } else {
-          const a = -CAROUSEL_SPRING_K * (p.x - bound) - CAROUSEL_SPRING_C * p.v;
-          p.v += a * dt;
-          p.x += p.v * dt;
-        }
-      } else {
-        p.v *= Math.exp(-CAROUSEL_FRICTION * dt);
-        p.x += p.v * dt;
-      }
-      render();
-
-      const settled =
-        Math.abs(p.v) < 4 &&
-        (bound === null ? true : Math.abs(p.x - bound) < 0.3);
-      if (settled) {
-        if (bound !== null) p.x = bound;
-        p.v = 0;
-        render();
-        p.frame = 0;
-        return;
-      }
-      p.frame = requestAnimationFrame(tick);
-    };
-    p.run = () => {
-      if (p.frame) return;
-      last = performance.now();
-      p.frame = requestAnimationFrame(tick);
-    };
-
-    // Trackpad / horizontal wheel: nudge the strip; the loop springs it back
-    // if it goes past an edge. Vertical wheel is left alone so the page scrolls.
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-      e.preventDefault();
-      p.v = 0;
-      p.x -= e.deltaX;
-      p.x = Math.max(p.min - 80, Math.min(80, p.x));
-      render();
-      p.run();
-    };
-    viewport.addEventListener("wheel", onWheel, { passive: false });
-
-    return () => {
-      cancelAnimationFrame(p.frame);
-      p.frame = 0;
-      ro.disconnect();
-      viewport.removeEventListener("wheel", onWheel);
-    };
-  }, []);
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    const p = physics.current;
-    p.dragging = true;
-    p.v = 0;
-    p.startPointerX = p.lastPointerX = e.clientX;
-    p.startX = p.x;
-    p.lastTime = performance.now();
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const p = physics.current;
-    if (!p.dragging || !trackRef.current) return;
-    const now = performance.now();
-    const dtMs = now - p.lastTime;
-    if (dtMs > 0) {
-      // Smoothed release velocity in px/s.
-      const inst = ((e.clientX - p.lastPointerX) / dtMs) * 1000;
-      p.v = p.v * 0.6 + inst * 0.4;
-    }
-    p.lastPointerX = e.clientX;
-    p.lastTime = now;
-
-    const target = p.startX + (e.clientX - p.startPointerX);
-    // Resist (rubber-band) only the portion dragged past an edge.
-    p.x =
-      target > 0
-        ? target * CAROUSEL_RUBBER
-        : target < p.min
-          ? p.min + (target - p.min) * CAROUSEL_RUBBER
-          : target;
-    trackRef.current.style.transform = `translate3d(${p.x}px,0,0)`;
-  };
-
-  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
-    const p = physics.current;
-    if (!p.dragging) return;
-    p.dragging = false;
-    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-    // Holding still before letting go shouldn't fling.
-    if (performance.now() - p.lastTime > 80) p.v = 0;
-    if (reducedRef.current) p.v = 0;
-    p.run();
-  };
-
-  return (
-    <section
-      aria-label="Photos of Holly Winkels"
-      className="w-full border-y border-foreground/10"
-    >
-      <div
-        ref={viewportRef}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        className="cursor-grab touch-pan-y select-none overflow-clip active:cursor-grabbing"
-      >
-        <div ref={trackRef} className="flex w-max will-change-transform">
-          {carouselImages.map((img, i) => (
-            <img
-              key={i}
-              src={img.src}
-              alt={img.alt}
-              draggable={false}
-              decoding="async"
-              loading={i < 3 ? "eager" : "lazy"}
-              className="h-64 sm:h-80 lg:h-[26rem] w-auto shrink-0 object-cover mx-1"
-            />
-          ))}
         </div>
       </div>
     </section>
@@ -437,7 +221,7 @@ function About() {
       id="about"
       className="min-h-[95vh] flex py-28 lg:py-40 items-center"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 items-center">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 lg:gap-x-24 items-center">
         <div className="fade-in lg:col-span-5">
           <img
             src={workImg}
@@ -538,14 +322,14 @@ function WorkWithMe() {
             />
           </div> */}
         </div>
-        <div className="grid md:grid-cols-3 gap-px bg-foreground/10">
+        <div className="grid md:grid-cols-3 gap-4 lg:gap-6">
           {services.map((s, i) => (
             <div
               key={s.no}
               className="fade-in"
               style={{ transitionDelay: `${0.1 + i * 0.15}s` }}
             >
-              <div className="bg-background p-10 lg:p-12 group hover:bg-brand transition-colors duration-500 flex flex-col justify-between h-full">
+              <div className="bg-background p-10 lg:p-12 group rounded-[2rem] border border-foreground/10 hover:border-brand hover:bg-brand transition-colors duration-500 flex flex-col justify-between h-full">
                 <div>
                   <p className="font-display text-6xl text-brand group-hover:text-brand-foreground transition-colors">
                     {s.no}

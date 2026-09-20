@@ -1,11 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import hollyWithAChicken from "@/assets/HollyWithAChicken.webp";
-import swimmingPicture from "@/assets/SwimmingPicture.webp";
 import hollyWorkingOnMoisturizer from "@/assets/HollyWorkingOnMoisturizer.webp";
 import hollyWithMentor from "@/assets/HollyWithMentor.webp";
 import hollyWithTheBeeHive from "@/assets/HollyWithWithTheBeeHive.webp";
 import hollyBuildingAHive from "@/assets/HollyBuildingAHiveWithBrother.webp";
+import hollyAsABaby from "@/assets/HollyAsABaby.webp";
+import hollyBuildingAHiveWithBrother from '@/assets/HollyBuildingAHiveWithBrother.jpeg';
+import hollyBeeFrames from '@/assets/HollyWorkingWithBeeFrames.webp';
+import hollyBeehive from '@/assets/HollyWithWithTheBeeHive.webp';
+import hollyPickingApples from '@/assets/HollyPickingApples.webp';
+import hollySwimming from '@/assets/SwimmingPicture.webp';
+import hollyWorking from '@/assets/HollyWorking.webp';
+
 import {
   Header,
   Footer,
@@ -36,13 +43,24 @@ export const Route = createFileRoute("/about2")({
   component: AboutPage,
 });
 
+type ChapterImage = {
+  src: string;
+  alt: string;
+  // Optional per-image crop. Omit for the default centred fill.
+  //   position: which part of the photo stays in frame, as a CSS
+  //             object-position ("top", "50% 20%", "left center", ...).
+  //   zoom:     1 = fit the frame (default); 1.5 = zoom in 50% around `position`.
+  crop?: { position?: string; zoom?: number };
+};
+
 type Chapter = {
   year: number;
   caption: string;
   heading: ReactNode;
   body: string[];
-  image: string;
-  alt: string;
+  // With more than one image, the photo changes part-way between this year and
+  // the next; each extra image also adds one screen of scroll to the chapter.
+  images: ChapterImage[];
 };
 
 // To add a section, add one object here. The scroll length, year row and
@@ -50,89 +68,101 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     year: 2005,
-    caption: "— Chapter One",
+    caption: "— The beginning",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Little <em className="text-brand">me</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "I grew up on a farm on the Mornington Peninsula, surrounded by animals, family and a business that was always a part of everyday life. I watched my parents build their business from the ground up and saw firsthand the work and responsibility that came with it.",
     ],
-    image: hollyWithAChicken,
-    alt: "Placeholder image for 2005",
+    images: [
+      { src: hollyAsABaby, alt: "Placeholder image for 2005" },
+      { src: hollyBuildingAHiveWithBrother, alt: "Placeholder image for 2005" },
+      { src: hollyPickingApples, alt: "Placeholder image for 2005" },],
   },
   {
     year: 2011,
-    caption: "— Chapter Two",
+    caption: "— Growing Up",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Early <em className="text-brand">Learning</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Some of my earliest memories are of helping Mum and Dad around the business with my brother and sister. Whether it was making products, helping in the shop or doing whatever little jobs I could do to help out.",
     ],
-    image: swimmingPicture,
-    alt: "Placeholder image for 2011",
+    images: [
+      { src: hollyBeeFrames, alt: "Placeholder image for 2011" },
+      { src: hollyBeehive, alt: "Placeholder image for 2011", crop: { "position": "left center"} },
+      { src: hollyWorkingOnMoisturizer, alt: "Placeholder image for 2011", crop: { "position": "left center" } },
+    ],
   },
   {
     year: 2015,
-    caption: "— Chapter Three",
+    caption: "— Swimming And School",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Finding my <em className="text-brand">passion</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Swimming was my whole life during my teens. I was up at 3:45 AM most mornings to train, balancing eight sessions a week with high school so I could compete at the national level.",
     ],
-    image: hollyWithTheBeeHive,
-    alt: "Placeholder image for 2015",
+    images: [
+      { src: hollySwimming, alt: "Placeholder image for 2015" }],
   },
   {
     year: 2017,
-    caption: "— Chapter Four",
+    caption: "— Moving Forward",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Life after <em className="text-brand">school</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "I graduated in 2023 and decided not to go to university. I didn't want to spend years studying something I didn't actually enjoy or see myself pursuing just because it was the expected next step.",
     ],
-    image: hollyBuildingAHive,
-    alt: "Placeholder image for 2017",
+    images: [{ src: hollyBuildingAHive, alt: "Placeholder image for 2017" }],
   },
   {
-    year: 2021,
-    caption: "— Chapter Five",
+    year: 2025,
+    caption: "— Family Back Together",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Back to <em className="text-brand">business</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+      "While working at Rebel Sport, I was still searching for my path. Attending a business event opened my eyes to new possibilities, but the real turning point came at home. My sister got unwell, leaving my parents balancing her care with running our family business. Seeing how much was on their plate gave me clear purpose. I left Rebel Sport and stepped into the business to support my family, lighten the load, and help build our future together.",
     ],
-    image: hollyWorkingOnMoisturizer,
-    alt: "Placeholder image for 2021",
+    images: [
+      { src: hollyWorkingOnMoisturizer, alt: "Placeholder image for 2021" },
+    ],
   },
   {
     year: 2026,
-    caption: "— Chapter Six",
+    caption: "— The Future",
     heading: (
       <>
-        Placeholder <em className="text-brand">heading</em>
+        Where I'm <em className="text-brand">going</em>
       </>
     ),
     body: [
-      "Placeholder paragraph. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.",
+      "One of the biggest shifts for me has been surrounding myself with people who have already done what I want to do and learning from their experience. It's changed the way I think about what's possible and where I want to go next. My focus now is on acquisitions, finding the right opportunity and taking it to the next level.",
     ],
-    image: hollyWithMentor,
-    alt: "Placeholder image for 2026",
+    images: [{ src: hollyWorking, alt: "Placeholder image for 2026" }],
   },
 ];
+
+// Scroll is measured in "screens": each image is worth one, so a chapter with
+// three photos takes three screens. STARTS[i] is where chapter i begins.
+const UNITS = CHAPTERS.map((c) => c.images.length);
+const STARTS = UNITS.map((_, i) =>
+  UNITS.slice(0, i).reduce((sum, n) => sum + n, 0),
+);
+const TOTAL_UNITS = UNITS.reduce((sum, n) => sum + n, 0);
 
 // Height of the fixed header (h-16); the pinned stage sits directly below it.
 const HEADER_PX = 64;
@@ -145,6 +175,7 @@ function StoryTimeline() {
   const stageRef = useRef<HTMLDivElement>(null);
   const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
+  const [activeImage, setActiveImage] = useState(0);
   const count = CHAPTERS.length;
 
   // Scrollable distance while pinned, and how far into it we currently are.
@@ -164,15 +195,21 @@ function StoryTimeline() {
       const m = getScrollRange();
       if (!m || m.range <= 0) return;
       const progress = Math.min(1, Math.max(0, m.scrolled / m.range));
+      const pos = progress * TOTAL_UNITS;
       // Connector i (year i -> i+1) is empty until chapter i activates and full
-      // once chapter i+1 does. Written straight to the DOM so scrolling doesn't
-      // re-render.
+      // once chapter i+1 does, however many screens that chapter spans. Written
+      // straight to the DOM so scrolling doesn't re-render.
       segmentRefs.current.forEach((el, i) => {
         if (!el) return;
-        const fill = Math.min(1, Math.max(0, progress * count - i));
+        const fill = Math.min(1, Math.max(0, (pos - STARTS[i]) / UNITS[i]));
         el.style.setProperty("--p", String(fill));
       });
-      setActive(Math.min(count - 1, Math.floor(progress * count)));
+      let chapter = count - 1;
+      while (chapter > 0 && pos < STARTS[chapter]) chapter--;
+      setActive(chapter);
+      setActiveImage(
+        Math.min(UNITS[chapter] - 1, Math.max(0, Math.floor(pos - STARTS[chapter]))),
+      );
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -191,9 +228,12 @@ function StoryTimeline() {
     const m = getScrollRange();
     const section = sectionRef.current;
     if (!m || !section) return;
-    // Aim for the middle of the chapter's slice so it lands unambiguously.
+    // Land exactly where the year starts (its connector empty, first image
+    // showing). The extra pixel keeps rounding from putting us a hair before
+    // the boundary, which would show the previous year.
     const sectionTop = window.scrollY + section.getBoundingClientRect().top;
-    const target = sectionTop - HEADER_PX + ((index + 0.5) / count) * m.range;
+    const target =
+      sectionTop - HEADER_PX + (STARTS[index] / TOTAL_UNITS) * m.range + 1;
     window.scrollTo({ top: target, behavior: "smooth" });
   };
 
@@ -201,7 +241,7 @@ function StoryTimeline() {
     <section
       ref={sectionRef}
       aria-label="Holly's story by year"
-      style={{ height: `${count * 100}svh` }}
+      style={{ height: `${TOTAL_UNITS * 100}svh` }}
       className="border-t border-foreground/10"
     >
       <div
@@ -254,21 +294,36 @@ function StoryTimeline() {
             ))}
           </ol>
 
-          {/* Image: one per year, cross-fading as the active year changes. */}
-          <div className="relative order-1 min-h-0 min-w-0 flex-1 sm:col-start-2 sm:row-start-2 sm:aspect-[4/5] sm:h-[80%] sm:w-auto sm:max-w-full sm:flex-none sm:self-center sm:justify-self-end">
-            {CHAPTERS.map((c, i) => (
-              <img
-                key={c.year}
-                src={c.image}
-                alt={c.alt}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                aria-hidden={i !== active}
-                className={`absolute inset-0 h-full w-full object-cover contrast-110 transition-opacity duration-700 motion-reduce:transition-none ${
-                  i === active ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            ))}
+          {/* Image: every chapter's images stacked, cross-fading as the year or
+              the image within a year changes. */}
+          <div className="relative order-1 min-h-0 min-w-0 flex-1 overflow-hidden rounded-[2rem] sm:col-start-2 sm:row-start-2 sm:aspect-[4/5] sm:h-[80%] sm:w-auto sm:max-w-full sm:flex-none sm:self-center sm:justify-self-end">
+            {CHAPTERS.flatMap((c, i) =>
+              c.images.map((img, j) => {
+                const visible = i === active && j === activeImage;
+                return (
+                  <img
+                    key={`${c.year}-${j}`}
+                    src={img.src}
+                    alt={img.alt}
+                    loading={i === 0 && j === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    aria-hidden={!visible}
+                    style={{
+                      objectPosition: img.crop?.position,
+                      // Zoom around the same point the crop is anchored to. The
+                      // frame above clips the overflow.
+                      transform: img.crop?.zoom
+                        ? `scale(${img.crop.zoom})`
+                        : undefined,
+                      transformOrigin: img.crop?.position,
+                    }}
+                    className={`absolute inset-0 h-full w-full object-cover contrast-110 transition-opacity duration-700 motion-reduce:transition-none ${
+                      visible ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                );
+              }),
+            )}
           </div>
           </div>
 
