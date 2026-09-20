@@ -1,9 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type { ReactNode } from "react";
-import hollyWithAChicken from "@/assets/HollyWithAChicken.jpeg";
-import swimmingPicture from "@/assets/SwimmingPicture.png";
-import hollyWorkingOnMoisturizer from "@/assets/HollyWorkingOnMoisturizer.jpeg";
-import hollyWithMentor from "@/assets/HollyWithMentor.jpeg";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import hollyWithAChicken from "@/assets/HollyWithAChicken.webp";
+import hollyWorkingOnMoisturizer from "@/assets/HollyWorkingOnMoisturizer.webp";
+import hollyWithMentor from "@/assets/HollyWithMentor.webp";
+import hollyWithTheBeeHive from "@/assets/HollyWithWithTheBeeHive.webp";
+import hollyBuildingAHive from "@/assets/HollyBuildingAHiveWithBrother.webp";
+import hollyAsABaby from "@/assets/HollyAsABaby.webp";
+import hollyBuildingAHiveWithBrother from '@/assets/HollyBuildingAHiveWithBrother.jpeg';
+import hollyBeeFrames from '@/assets/HollyWorkingWithBeeFrames.webp';
+import hollyBeehive from '@/assets/HollyWithWithTheBeeHive.webp';
+import hollyPickingApples from '@/assets/HollyPickingApples.webp';
+import hollySwimming from '@/assets/SwimmingPicture.webp';
+import hollyWorking from '@/assets/HollyWorking.webp';
+
 import {
   Header,
   Footer,
@@ -22,11 +31,6 @@ export const Route = createFileRoute("/about")({
           "The story behind Holly Winkels — from a bee farm on the Mornington Peninsula to national-level swimming and building her own business.",
       },
       { property: "og:title", content: "About — Holly Winkels" },
-      {
-        property: "og:description",
-        content:
-          "From a bee farm on the Mornington Peninsula to national-level swimming. The story behind Holly Winkels.",
-      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/about" },
     ],
@@ -38,65 +42,412 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
 });
 
-function StorySection({
-  image,
-  alt,
-  caption,
-  heading,
-  reverse = false,
-  imagePosition = "object-center",
-  children,
-}: {
-  image: string;
+type ChapterImage = {
+  src: string;
   alt: string;
+  // Optional per-image crop. Omit for the default centred fill.
+  //   position: which part of the photo stays in frame, as a CSS
+  //             object-position ("top", "50% 20%", "left center", ...).
+  //   zoom:     1 = fit the frame (default); 1.5 = zoom in 50% around `position`.
+  crop?: { position?: string; zoom?: number };
+};
+
+type Chapter = {
+  year: number;
   caption: string;
   heading: ReactNode;
-  reverse?: boolean;
-  imagePosition?: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="py-20 lg:py-32 border-t border-foreground/10">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 items-start">
-        <div
-          className={`fade-in lg:col-span-5 lg:sticky lg:top-32 ${
-            reverse ? "lg:order-2" : "lg:order-1"
-          }`}
-        >
-          <div className="w-4/5 mx-auto aspect-[4/5] flex items-center justify-center">
-            <img
-              src={image}
-              alt={alt}
-              loading="lazy"
-              width={1024}
-              height={1280}
-              className={`w-3/4 h-3/4 object-cover contrast-110 ${imagePosition}`}
-            />
-          </div>
-        </div>
+  body: string[];
+  // With more than one image, the photo changes part-way between this year and
+  // the next; each extra image also adds one screen of scroll to the chapter.
+  images: ChapterImage[];
+};
 
-        <div
-          className={`lg:col-span-7 flex flex-col items-start text-left ${
-            reverse ? "lg:order-1" : "lg:order-2"
-          }`}
-        >
-          <p
-            className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6"
-            style={{ transitionDelay: "0.15s" }}
-          >
-            {caption}
+// To add a section, add one object here. The scroll length, year row and
+// image/text layers are all derived from this list.
+const CHAPTERS: Chapter[] = [
+  {
+    year: 2005,
+    caption: "— The beginning",
+    heading: (
+      <>
+        Little <em className="text-brand">me</em>
+      </>
+    ),
+    body: [
+      "I grew up on a farm on the Mornington Peninsula, surrounded by animals, family and a business that was always a part of everyday life. I watched my parents build their business from the ground up and saw firsthand the work and responsibility that came with it.",
+    ],
+    images: [
+      { src: hollyAsABaby, alt: "Placeholder image for 2005" },
+      { src: hollyBuildingAHiveWithBrother, alt: "Placeholder image for 2005" },
+      { src: hollyPickingApples, alt: "Placeholder image for 2005" },],
+  },
+  {
+    year: 2011,
+    caption: "— Growing Up",
+    heading: (
+      <>
+        Early <em className="text-brand">Learning</em>
+      </>
+    ),
+    body: [
+      "Some of my earliest memories are of helping Mum and Dad around the business with my brother and sister. Whether it was making products, helping in the shop or doing whatever little jobs I could do to help out.",
+    ],
+    images: [
+      { src: hollyBeeFrames, alt: "Placeholder image for 2011" },
+      { src: hollyBeehive, alt: "Placeholder image for 2011", crop: { "position": "left center"} },
+      { src: hollyWorkingOnMoisturizer, alt: "Placeholder image for 2011", crop: { "position": "left center" } },
+    ],
+  },
+  {
+    year: 2015,
+    caption: "— Swimming And School",
+    heading: (
+      <>
+        Finding my <em className="text-brand">passion</em>
+      </>
+    ),
+    body: [
+      "Swimming was my whole life during my teens. I was up at 3:45 AM most mornings to train, balancing eight sessions a week with high school so I could compete at the national level.",
+    ],
+    images: [
+      { src: hollySwimming, alt: "Placeholder image for 2015" }],
+  },
+  {
+    year: 2017,
+    caption: "— Moving Forward",
+    heading: (
+      <>
+        Life after <em className="text-brand">school</em>
+      </>
+    ),
+    body: [
+      "I graduated in 2023 and decided not to go to university. I didn't want to spend years studying something I didn't actually enjoy or see myself pursuing just because it was the expected next step.",
+    ],
+    images: [{ src: hollyBuildingAHive, alt: "Placeholder image for 2017" }],
+  },
+  {
+    year: 2025,
+    caption: "— Family Back Together",
+    heading: (
+      <>
+        Back to <em className="text-brand">business</em>
+      </>
+    ),
+    body: [
+      "While working at Rebel Sport, I was still searching for my path. Attending a business event opened my eyes to new possibilities, but the real turning point came at home. My sister got unwell, leaving my parents balancing her care with running our family business. Seeing how much was on their plate gave me clear purpose. I left Rebel Sport and stepped into the business to support my family, lighten the load, and help build our future together.",
+    ],
+    images: [
+      { src: hollyWorkingOnMoisturizer, alt: "Placeholder image for 2021" },
+    ],
+  },
+  {
+    year: 2026,
+    caption: "— The Future",
+    heading: (
+      <>
+        Where I'm <em className="text-brand">going</em>
+      </>
+    ),
+    body: [
+      "One of the biggest shifts for me has been surrounding myself with people who have already done what I want to do and learning from their experience. It's changed the way I think about what's possible and where I want to go next. My focus now is on acquisitions, finding the right opportunity and taking it to the next level.",
+    ],
+    images: [{ src: hollyWorking, alt: "Placeholder image for 2026" }],
+  },
+];
+
+// Scroll is measured in "screens": each image is worth one, so a chapter with
+// three photos takes three screens. STARTS[i] is where chapter i begins.
+const UNITS = CHAPTERS.map((c) => c.images.length);
+const STARTS = UNITS.map((_, i) =>
+  UNITS.slice(0, i).reduce((sum, n) => sum + n, 0),
+);
+const TOTAL_UNITS = UNITS.reduce((sum, n) => sum + n, 0);
+
+// Height of the fixed header (h-16); the pinned stage sits directly below it.
+const HEADER_PX = 64;
+
+// Phone-only paragraph reveal. Text is split into words (so lines wrap the same
+// before and after a letter appears) and characters; each character's opacity
+// comes from the --n / --i CSS variables in styles.css.
+const PHONE_QUERY = "(max-width: 639.98px)";
+const REVEAL_END = 0.8; // paragraph is fully shown by 80% of the year's scroll
+const REVEAL_FADE = 4; // must match the "/ 4" in .reveal-char
+const wordsOf = (para: string) => para.split(" ").filter(Boolean);
+const CHAR_COUNTS = CHAPTERS.map((c) =>
+  c.body.reduce((sum, p) => sum + wordsOf(p).join("").length, 0),
+);
+
+// The paragraph(s) of one chapter. On phones: a fixed-height window over text
+// that types in as you scroll; once the text is taller than the window it slides
+// up, new text arriving at the bottom while the top fades out. On larger
+// screens the window limits are off and it is just a normal paragraph.
+function RevealBody({
+  body,
+  windowRef,
+}: {
+  body: string[];
+  windowRef: (el: HTMLDivElement | null) => void;
+}) {
+  let index = 0;
+  return (
+    <div
+      ref={windowRef}
+      className="reveal-window mt-10 max-h-[calc(1.625em*5)] max-w-xl overflow-hidden text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:max-h-none sm:overflow-visible sm:text-lg lg:text-xl"
+      style={{ "--n": 0, "--shift": 0, "--fade": 0 } as React.CSSProperties}
+    >
+      <div className="reveal-shift relative space-y-6">
+        {body.map((para, j) => (
+          <p key={j}>
+            {/* Screen readers get the plain text; the per-letter copy is visual. */}
+            <span className="sr-only">{para}</span>
+            <span aria-hidden>
+              {wordsOf(para).map((word, w) => (
+                <Fragment key={w}>
+                  {w > 0 && " "}
+                  <span className="whitespace-nowrap">
+                    {[...word].map((ch) => (
+                      <span
+                        key={index}
+                        data-c
+                        className="reveal-char"
+                        style={{ "--i": index++ } as React.CSSProperties}
+                      >
+                        {ch}
+                      </span>
+                    ))}
+                  </span>
+                </Fragment>
+              ))}
+            </span>
           </p>
-          <h2
-            className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
-            style={{ transitionDelay: "0.2s" }}
-          >
-            {heading}
-          </h2>
-          <div
-            className="fade-in space-y-6 text-[clamp(15px,3.5vw,17px)] text-foreground/70 leading-relaxed max-w-xl mt-10"
-            style={{ transitionDelay: "0.3s" }}
-          >
-            {children}
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Pins a single stage to the viewport while normal page scrolling steps
+// through the chapters. Nothing hijacks the scroll: the tall outer section is
+// just runway, and the sticky stage is released once the last year is reached.
+function StoryTimeline() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const bodyRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [active, setActive] = useState(0);
+  const [activeImage, setActiveImage] = useState(0);
+  const count = CHAPTERS.length;
+
+  // Scrollable distance while pinned, and how far into it we currently are.
+  const getScrollRange = () => {
+    const section = sectionRef.current;
+    const stage = stageRef.current;
+    if (!section || !stage) return null;
+    const range = section.offsetHeight - stage.offsetHeight;
+    const scrolled = HEADER_PX - section.getBoundingClientRect().top;
+    return { range, scrolled };
+  };
+
+  useEffect(() => {
+    let frame = 0;
+    const phone = window.matchMedia(PHONE_QUERY);
+    // Last --n written per chapter, so idle chapters cost nothing per frame.
+    const lastN: number[] = CHAPTERS.map(() => -1);
+    const charEls: (NodeListOf<HTMLElement> | undefined)[] = [];
+
+    const updateBodies = (pos: number) => {
+      if (!phone.matches) return;
+      bodyRefs.current.forEach((win, i) => {
+        if (!win) return;
+        const t = Math.min(
+          1,
+          Math.max(0, (pos - STARTS[i]) / UNITS[i] / REVEAL_END),
+        );
+        const n = t * (CHAR_COUNTS[i] + REVEAL_FADE);
+        if (n === lastN[i]) return;
+        lastN[i] = n;
+        win.style.setProperty("--n", String(n));
+
+        // Slide so the newest revealed character stays inside the window.
+        const chars = (charEls[i] ??= win.querySelectorAll<HTMLElement>("[data-c]"));
+        const lead = chars[Math.min(chars.length - 1, Math.floor(n))];
+        const bottom = lead ? lead.offsetTop + lead.offsetHeight : 0;
+        const shift = Math.max(0, bottom - win.clientHeight);
+        win.style.setProperty("--shift", String(shift));
+        win.style.setProperty("--fade", String(Math.min(1, shift / 16)));
+      });
+    };
+
+    const update = () => {
+      frame = 0;
+      const m = getScrollRange();
+      if (!m || m.range <= 0) return;
+      const progress = Math.min(1, Math.max(0, m.scrolled / m.range));
+      const pos = progress * TOTAL_UNITS;
+      // Connector i (year i -> i+1) is empty until chapter i activates and full
+      // once chapter i+1 does, however many screens that chapter spans. Written
+      // straight to the DOM so scrolling doesn't re-render.
+      segmentRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const fill = Math.min(1, Math.max(0, (pos - STARTS[i]) / UNITS[i]));
+        el.style.setProperty("--p", String(fill));
+      });
+      updateBodies(pos);
+      let chapter = count - 1;
+      while (chapter > 0 && pos < STARTS[chapter]) chapter--;
+      setActive(chapter);
+      setActiveImage(
+        Math.min(UNITS[chapter] - 1, Math.max(0, Math.floor(pos - STARTS[chapter]))),
+      );
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    // Line breaks change with width (and the effect switches on/off across the
+    // phone breakpoint), so the slide distance must be recomputed.
+    const onResize = () => {
+      lastN.fill(-1);
+      onScroll();
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [count]);
+
+  const goTo = (index: number) => {
+    const m = getScrollRange();
+    const section = sectionRef.current;
+    if (!m || !section) return;
+    // Land exactly where the year starts (its connector empty, first image
+    // showing). The extra pixel keeps rounding from putting us a hair before
+    // the boundary, which would show the previous year.
+    const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+    const target =
+      sectionTop - HEADER_PX + (STARTS[index] / TOTAL_UNITS) * m.range + 1;
+    window.scrollTo({ top: target, behavior: "smooth" });
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-label="Holly's story by year"
+      style={{ height: `${TOTAL_UNITS * 100}svh` }}
+      className="border-t border-foreground/10"
+    >
+      <div
+        ref={stageRef}
+        className="sticky top-16 flex h-[calc(100svh-4rem)] flex-col overflow-hidden"
+      >
+        {/* Mobile: column of [image | vertical timeline] then text.
+            sm and up: column of [timeline, row of (text, image)]. */}
+        <div className="mx-auto flex h-full w-full max-w-7xl min-h-0 flex-col gap-5 px-6 py-6 sm:grid sm:grid-cols-2 sm:grid-rows-[auto_minmax(0,1fr)] sm:gap-x-16 sm:gap-y-8 lg:gap-x-24 lg:px-10 lg:py-10">
+          {/* sm:contents lets the timeline and image join the grid above. */}
+          <div className="flex h-[40svh] min-h-0 flex-none flex-row gap-8 sm:contents">
+          {/* Year indicator: every year visible, the current one emphasised. */}
+          <ol className="order-2 flex shrink-0 flex-col items-center font-display sm:col-span-2 sm:row-start-1 sm:flex-row">
+            {CHAPTERS.map((c, i) => (
+              <Fragment key={c.year}>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-current={i === active ? "step" : undefined}
+                    // Years already scrolled through (and the current one) are
+                    // brand-coloured; upcoming ones stay faded.
+                    className={`cursor-pointer text-lg transition-colors duration-500 motion-reduce:transition-none sm:text-3xl lg:text-4xl ${
+                      i <= active
+                        ? "text-brand"
+                        : "text-foreground/30 hover:text-foreground/60"
+                    }`}
+                  >
+                    {c.year}
+                  </button>
+                </li>
+                {/* Connector to the next year; fills as you scroll between them. */}
+                {i < count - 1 && (
+                  <li
+                    aria-hidden
+                    className="my-1.5 min-h-4 w-[2px] flex-1 bg-foreground/15 sm:mx-5 sm:my-0 sm:h-[2px] sm:min-h-0 sm:w-auto"
+                  >
+                    {/* --p (0..1) is set on scroll; it scales down the line on
+                        mobile and along it from sm up. */}
+                    <div
+                      ref={(el) => {
+                        segmentRefs.current[i] = el;
+                      }}
+                      className="h-full w-full origin-top bg-brand will-change-transform [transform:scaleY(var(--p))] sm:origin-left sm:[transform:scaleX(var(--p))]"
+                      style={{ "--p": 0 } as React.CSSProperties}
+                    />
+                  </li>
+                )}
+              </Fragment>
+            ))}
+          </ol>
+
+          {/* Image: every chapter's images stacked, cross-fading as the year or
+              the image within a year changes. */}
+          <div className="relative order-1 min-h-0 min-w-0 flex-1 overflow-hidden rounded-[2rem] sm:col-start-2 sm:row-start-2 sm:aspect-[4/5] sm:h-[80%] sm:w-auto sm:max-w-full sm:flex-none sm:self-center sm:justify-self-end">
+            {CHAPTERS.flatMap((c, i) =>
+              c.images.map((img, j) => {
+                const visible = i === active && j === activeImage;
+                return (
+                  <img
+                    key={`${c.year}-${j}`}
+                    src={img.src}
+                    alt={img.alt}
+                    loading={i === 0 && j === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    aria-hidden={!visible}
+                    style={{
+                      objectPosition: img.crop?.position,
+                      // Zoom around the same point the crop is anchored to. The
+                      // frame above clips the overflow.
+                      transform: img.crop?.zoom
+                        ? `scale(${img.crop.zoom})`
+                        : undefined,
+                      transformOrigin: img.crop?.position,
+                    }}
+                    className={`absolute inset-0 h-full w-full object-cover contrast-110 transition-opacity duration-700 motion-reduce:transition-none ${
+                      visible ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                );
+              }),
+            )}
+          </div>
+          </div>
+
+          {/* Text: layers share one grid cell so the block is as tall as the
+              longest chapter and never jumps when swapping. Spacing matches the
+              rest of the site (caption mb-6, paragraph mt-10). */}
+          <div className="grid shrink-0 sm:col-start-1 sm:row-start-2 sm:self-center">
+            {CHAPTERS.map((c, i) => (
+              <div
+                key={c.year}
+                aria-hidden={i !== active}
+                className={`col-start-1 row-start-1 flex flex-col items-start text-left transition-opacity duration-500 motion-reduce:transition-none ${
+                  i === active ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-brand sm:mb-6">
+                  {c.caption}
+                </p>
+                <h2 className="font-display text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight sm:text-[clamp(2.5rem,5vw,5rem)] lg:text-[clamp(3rem,5vw,5.5rem)]">
+                  {c.heading}
+                </h2>
+                <RevealBody
+                  body={c.body}
+                  windowRef={(el) => {
+                    bodyRefs.current[i] = el;
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -112,7 +463,7 @@ function AboutPage() {
 
       <Header />
 
-      <section className="relative flex items-center justify-center text-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-16 lg:pt-48 lg:pb-20 overflow-hidden">
+      <section className="relative flex min-h-[80svh] items-center justify-center text-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-16 lg:pt-48 lg:pb-20 overflow-hidden">
         <div className="mx-auto max-w-4xl px-6 lg:px-10">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
             — About
@@ -126,142 +477,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <StorySection
-        image={hollyWithAChicken}
-        alt="Holly with a chicken on the family farm"
-        caption="— Where It Started"
-        heading={
-          <>
-            A childhood on the <em className="text-brand">farm</em>
-          </>
-        }
-      >
-        <p>
-          I grew up on a farm on the Mornington Peninsula, surrounded by
-          animals and a family business. Business was a normal part of my
-          life growing up. I watched my parents build Pure Peninsula Honey
-          from the ground up, but I never really thought it would become my
-          own path.
-        </p>
-      </StorySection>
-
-      <StorySection
-        image={swimmingPicture}
-        alt="Holly competing in swimming"
-        caption="— The Pool & After School"
-        heading={
-          <>
-            Chasing swimming, choosing my own{" "}
-            <em className="text-brand">path</em>
-          </>
-        }
-        reverse
-      >
-        <p>
-          For most of my teenage years, swimming was what I loved. I trained
-          and competed at a national level, and for a long time, I thought it
-          might be the path I followed. I still wanted to keep my options
-          open because, honestly, I had no idea what I wanted to do after
-          school.
-        </p>
-        <p>
-          I graduated Year 12 and decided not to go to university. I didn't
-          want to spend years studying something I didn't actually enjoy
-          just because it was the expected next step. At the same time, I
-          was training heavily in swimming while helping out in the family
-          business wherever I was needed, from making beeswax candles and
-          honey straws to bottling honey and filling in at the shop.
-        </p>
-        <p>
-          I was waking up around 3:45am most mornings and driving 45 minutes
-          to an hour to training.
-        </p>
-      </StorySection>
-
-      <StorySection
-        image={hollyWorkingOnMoisturizer}
-        alt="Holly working on a moisturizer product"
-        caption="— A Shift & Family First"
-        heading={
-          <>
-            Wanting more, stepping <em className="text-brand">up</em>
-          </>
-        }
-      >
-        <p>
-          I also started working at Rebel Sport. I really enjoyed the people
-          and the experience, but I began to realise I wanted more. I just
-          didn't know exactly what that looked like yet.
-        </p>
-        <p>
-          Then I went to a business event that opened my eyes to a
-          completely different side of business. It made me start thinking
-          more seriously about what was happening inside my own family's
-          business and whether I could play a bigger role in it.
-        </p>
-        <p>
-          Around the same time, my sister became unwell, and I could see how
-          much of Mum's time and energy was being taken up supporting her. I
-          started helping Mum more directly while becoming increasingly
-          involved in the family business.
-        </p>
-        <p>
-          I eventually decided to put my focus into helping my parents manage
-          the business while also supporting my sister.
-        </p>
-      </StorySection>
-
-      <StorySection
-        image={hollyWithMentor}
-        alt="Holly with a mentor"
-        imagePosition="object-top"
-        caption="— Learning To Build & What's Next"
-        heading={
-          <>
-            Finding my mentors, building my own{" "}
-            <em className="text-brand">chapter</em>
-          </>
-        }
-        reverse
-      >
-        <p>
-          The more involved I became, the more interested I got. I started
-          learning from people who had built businesses themselves, seeking
-          out mentors and putting myself in rooms where I could learn. I was
-          exposed to ideas and ways of thinking that I hadn't come across
-          before.
-        </p>
-        <p>
-          I became particularly interested in building the systems,
-          structure and team around the business so it could operate
-          successfully without everything falling back on my parents.
-          Helping take the business into its next chapter and creating more
-          freedom for them has become a big part of what I do.
-        </p>
-        <p>
-          But working in the family business also made me realise something
-          else: I want to build something of my own.
-        </p>
-        <p>
-          I'm continuing to help grow and transition the family business
-          while exploring opportunities to acquire an established business of
-          my own.
-        </p>
-        <p>I don't have every step mapped out.</p>
-        <p>
-          But somewhere along the way, I stopped worrying so much about
-          having the perfect plan and started paying attention to what I
-          actually enjoyed.
-        </p>
-        <p>
-          And I realised I really love business.
-        </p>
-        <p>
-          I wanted more then.
-          <br />
-          I still do.
-        </p>
-      </StorySection>
+      <StoryTimeline />
 
       <CTA />
 

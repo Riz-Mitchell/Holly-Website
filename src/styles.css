@@ -141,6 +141,47 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Scroll-revealed paragraph (about page, phones only). JS sets three
+     variables on .reveal-window: --n (characters revealed so far), --shift (px
+     the text has slid up) and --fade (0..1, strength of the top-edge fade).
+     Everything is scoped to phone widths, so larger screens show plain text. */
+  @media (max-width: 639.98px) {
+    .reveal-char {
+      /* Each character fades in over the 4 characters after it is reached. */
+      opacity: clamp(0, calc((var(--n, 0) - var(--i)) / 4), 1);
+    }
+    .reveal-window {
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        #000 calc(var(--fade, 0) * 3em)
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        #000 calc(var(--fade, 0) * 3em)
+      );
+    }
+    .reveal-shift {
+      transform: translateY(calc(var(--shift, 0) * -1px));
+      transition: transform 300ms ease-out;
+    }
+  }
+  @media (max-width: 639.98px) and (prefers-reduced-motion: reduce) {
+    .reveal-char {
+      opacity: 1;
+    }
+    .reveal-window {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .reveal-shift {
+      transform: none;
+      transition: none;
+    }
+  }
+
   /* Every photo on the site gets the same large rounding. Lives in the base
      layer so a `rounded-*` utility on a specific image can still override it. */
   img {

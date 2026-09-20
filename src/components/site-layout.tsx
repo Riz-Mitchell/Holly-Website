@@ -13,6 +13,9 @@ const NAV_LINKS = [
   { href: "/about", label: "My Story" },
 ];
 
+// The drawer adds a Home link; on desktop the logo already links home.
+const MOBILE_NAV_LINKS = [{ href: "/", label: "Home" }, ...NAV_LINKS];
+
 // Both sized 22x22 so the hamburger and its close icon read as a matched
 // pair rather than swapping to a visually different size on open.
 const MOBILE_NAV_ICON_SIZE = 22;
@@ -120,7 +123,7 @@ export function Header() {
               Site navigation
             </SheetDescription>
             <nav className="flex flex-1 flex-col justify-center gap-8 px-8 font-display text-3xl">
-              {NAV_LINKS.map((link) => (
+              {MOBILE_NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
@@ -242,11 +245,11 @@ export function CTA() {
       className="min-h-screen flex py-32 lg:py-48 bg-brand text-brand-foreground"
     >
       <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center">
-        <p className="fade-in text-xs uppercase tracking-[0.3em] mb-8 opacity-80">
+        <p className="fade-in text-xs uppercase tracking-[0.3em] mb-3 sm:mb-6 opacity-80">
           — Contact Me
         </p>
         <h2
-          className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-[0.9] tracking-tight"
+          className="fade-in font-display text-[clamp(2.25rem,10vw,3.25rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-[0.9] tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
           Get in touch

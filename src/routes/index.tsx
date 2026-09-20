@@ -123,10 +123,10 @@ function Hero() {
     >
       <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 lg:gap-x-24 items-center">
         <div className="lg:col-span-7 animate-rise">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-8">
+          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
             Entrepreneur · Investor · Athlete
           </p>
-          <h1 className="font-display text-[clamp(3.25rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight pb-4">
+          <h1 className="font-display text-[clamp(2.75rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight pb-4">
             <AnimatedText
               baseDelay={0}
               stagger={0.1}
@@ -233,11 +233,11 @@ function About() {
           />
         </div>
         <div className="lg:col-span-7 ap-8">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
+          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
             — About
           </p>
           <h2
-            className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+            className="fade-in font-display text-[clamp(2.25rem,10vw,3.25rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
             style={{ transitionDelay: "0.1s" }}
           >
             I chose a
@@ -301,11 +301,11 @@ function WorkWithMe() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 w-full">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-20 gap-8">
           <div className="lg:w-1/2">
-            <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-6">
+            <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
               — Work With Me
             </p>
             <h2
-              className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+              className="fade-in font-display text-[clamp(2.25rem,10vw,3.25rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
               style={{ transitionDelay: "0.1s" }}
             >
               Where I'm <em className="text-brand">focused</em>
@@ -543,7 +543,7 @@ function Testimonials() {
           — Testimonials
         </p>
         <h2
-          className="fade-in font-display text-[clamp(2.25rem,9vw,3rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
+          className="fade-in font-display text-[clamp(2.25rem,10vw,3.25rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
           style={{ transitionDelay: "0.1s" }}
         >
           What
