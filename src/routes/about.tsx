@@ -316,7 +316,7 @@ function StoryTimeline() {
                         : undefined,
                       transformOrigin: img.crop?.position,
                     }}
-                    className={`absolute inset-0 h-full w-full object-cover contrast-110 transition-opacity duration-700 motion-reduce:transition-none ${
+                    className={`absolute inset-0 h-full w-full object-cover contrast-110 transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
                       visible ? "opacity-100" : "opacity-0"
                     }`}
                   />
@@ -334,7 +334,7 @@ function StoryTimeline() {
               <div
                 key={c.year}
                 aria-hidden={i !== active}
-                className={`col-start-1 row-start-1 flex flex-col items-start text-left transition-opacity duration-500 motion-reduce:transition-none ${
+                className={`col-start-1 row-start-1 flex flex-col items-start text-left transition-opacity duration-1000 ease-in-out motion-reduce:transition-none ${
                   i === active ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               >
