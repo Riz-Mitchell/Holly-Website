@@ -166,66 +166,6 @@ const TOTAL_UNITS = UNITS.reduce((sum, n) => sum + n, 0);
 // Height of the fixed header (h-16); the pinned stage sits directly below it.
 const HEADER_PX = 64;
 
-// Phone-only paragraph reveal. Text is split into words (so lines wrap the same
-// before and after a letter appears) and characters; each character's opacity
-// comes from the --n / --i CSS variables in styles.css.
-const PHONE_QUERY = "(max-width: 639.98px)";
-const REVEAL_END = 0.8; // paragraph is fully shown by 80% of the year's scroll
-const REVEAL_FADE = 4; // must match the "/ 4" in .reveal-char
-const wordsOf = (para: string) => para.split(" ").filter(Boolean);
-const CHAR_COUNTS = CHAPTERS.map((c) =>
-  c.body.reduce((sum, p) => sum + wordsOf(p).join("").length, 0),
-);
-
-// The paragraph(s) of one chapter. On phones: a fixed-height window over text
-// that types in as you scroll; once the text is taller than the window it slides
-// up, new text arriving at the bottom while the top fades out. On larger
-// screens the window limits are off and it is just a normal paragraph.
-function RevealBody({
-  body,
-  windowRef,
-}: {
-  body: string[];
-  windowRef: (el: HTMLDivElement | null) => void;
-}) {
-  let index = 0;
-  return (
-    <div
-      ref={windowRef}
-      className="reveal-window mt-10 max-h-[calc(1.625em*5)] max-w-xl overflow-hidden text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:max-h-none sm:overflow-visible sm:text-lg lg:text-xl"
-      style={{ "--n": 0, "--shift": 0, "--fade": 0 } as React.CSSProperties}
-    >
-      <div className="reveal-shift relative space-y-6">
-        {body.map((para, j) => (
-          <p key={j}>
-            {/* Screen readers get the plain text; the per-letter copy is visual. */}
-            <span className="sr-only">{para}</span>
-            <span aria-hidden>
-              {wordsOf(para).map((word, w) => (
-                <Fragment key={w}>
-                  {w > 0 && " "}
-                  <span className="whitespace-nowrap">
-                    {[...word].map((ch) => (
-                      <span
-                        key={index}
-                        data-c
-                        className="reveal-char"
-                        style={{ "--i": index++ } as React.CSSProperties}
-                      >
-                        {ch}
-                      </span>
-                    ))}
-                  </span>
-                </Fragment>
-              ))}
-            </span>
-          </p>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // Pins a single stage to the viewport while normal page scrolling steps
 // through the chapters. Nothing hijacks the scroll: the tall outer section is
 // just runway, and the sticky stage is released once the last year is reached.
@@ -233,7 +173,6 @@ function StoryTimeline() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const bodyRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
   const [activeImage, setActiveImage] = useState(0);
   const count = CHAPTERS.length;
@@ -250,34 +189,6 @@ function StoryTimeline() {
 
   useEffect(() => {
     let frame = 0;
-    const phone = window.matchMedia(PHONE_QUERY);
-    // Last --n written per chapter, so idle chapters cost nothing per frame.
-    const lastN: number[] = CHAPTERS.map(() => -1);
-    const charEls: (NodeListOf<HTMLElement> | undefined)[] = [];
-
-    const updateBodies = (pos: number) => {
-      if (!phone.matches) return;
-      bodyRefs.current.forEach((win, i) => {
-        if (!win) return;
-        const t = Math.min(
-          1,
-          Math.max(0, (pos - STARTS[i]) / UNITS[i] / REVEAL_END),
-        );
-        const n = t * (CHAR_COUNTS[i] + REVEAL_FADE);
-        if (n === lastN[i]) return;
-        lastN[i] = n;
-        win.style.setProperty("--n", String(n));
-
-        // Slide so the newest revealed character stays inside the window.
-        const chars = (charEls[i] ??= win.querySelectorAll<HTMLElement>("[data-c]"));
-        const lead = chars[Math.min(chars.length - 1, Math.floor(n))];
-        const bottom = lead ? lead.offsetTop + lead.offsetHeight : 0;
-        const shift = Math.max(0, bottom - win.clientHeight);
-        win.style.setProperty("--shift", String(shift));
-        win.style.setProperty("--fade", String(Math.min(1, shift / 16)));
-      });
-    };
-
     const update = () => {
       frame = 0;
       const m = getScrollRange();
@@ -292,7 +203,6 @@ function StoryTimeline() {
         const fill = Math.min(1, Math.max(0, (pos - STARTS[i]) / UNITS[i]));
         el.style.setProperty("--p", String(fill));
       });
-      updateBodies(pos);
       let chapter = count - 1;
       while (chapter > 0 && pos < STARTS[chapter]) chapter--;
       setActive(chapter);
@@ -303,19 +213,13 @@ function StoryTimeline() {
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
-    // Line breaks change with width (and the effect switches on/off across the
-    // phone breakpoint), so the slide distance must be recomputed.
-    const onResize = () => {
-      lastN.fill(-1);
-      onScroll();
-    };
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", onScroll);
     };
   }, [count]);
 
@@ -440,12 +344,11 @@ function StoryTimeline() {
                 <h2 className="font-display text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight sm:text-[clamp(2.5rem,5vw,5rem)] lg:text-[clamp(3rem,5vw,5.5rem)]">
                   {c.heading}
                 </h2>
-                <RevealBody
-                  body={c.body}
-                  windowRef={(el) => {
-                    bodyRefs.current[i] = el;
-                  }}
-                />
+                <div className="mt-10 max-w-xl space-y-6 text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:text-lg lg:text-xl">
+                  {c.body.map((para, j) => (
+                    <p key={j}>{para}</p>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

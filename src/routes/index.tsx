@@ -121,7 +121,7 @@ function Hero() {
       id="top"
       className="relative min-h-[95vh] flex items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-12 lg:gap-x-24 items-center">
+      <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-4 lg:gap-12 lg:gap-x-24 items-center">
         <div className="lg:col-span-7 animate-rise">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
             Entrepreneur · Investor · Athlete
@@ -222,7 +222,7 @@ function About() {
       className="min-h-[95vh] flex py-28 lg:py-40 items-center"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 lg:gap-x-24 items-center">
-        <div className="fade-in lg:col-span-5">
+        <div className="fade-in order-2 lg:order-1 lg:col-span-5">
           <img
             src={workImg}
             alt="Holly Winkels working"
@@ -232,7 +232,7 @@ function About() {
             className="w-full aspect-square object-cover"
           />
         </div>
-        <div className="lg:col-span-7 ap-8">
+        <div className="order-1 lg:order-2 lg:col-span-7 ap-8">
           <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
             — About
           </p>
