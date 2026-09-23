@@ -134,7 +134,7 @@ const CHAPTERS: Chapter[] = [
       </>
     ),
     body: [
-      "While working at Rebel Sport, I was still searching for my path. Attending a business event opened my eyes to new possibilities, but the real turning point came at home. My sister got unwell, leaving my parents balancing her care with running our family business. Seeing how much was on their plate gave me clear purpose. I left Rebel Sport and stepped into the business to support my family, lighten the load, and help build our future together.",
+      "While working at Rebel Sport, my sister’s declining health shifted my priorities toward family. Seeing my parents balance caring for her with running our family business made me realise where I was needed. I left Rebel Sport to support my family and take on a greater role in the business.",
     ],
     images: [
       { src: hollyWorkingOnMoisturizer, alt: "Placeholder image for 2021" },
