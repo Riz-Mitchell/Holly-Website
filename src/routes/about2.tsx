@@ -345,7 +345,7 @@ function StoryTimeline() {
                 <h2 className="font-display text-[clamp(1.75rem,7vw,2.5rem)] leading-none tracking-tight sm:text-[clamp(2.5rem,5vw,5rem)] lg:text-[clamp(3rem,5vw,5.5rem)]">
                   {c.heading}
                 </h2>
-                <div className="mt-10 max-w-xl space-y-6 text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:text-lg lg:text-xl">
+                <div className="mt-5 max-w-xl space-y-6 text-[clamp(15px,3.5vw,17px)] leading-relaxed text-foreground/70 sm:text-lg lg:text-xl">
                   {c.body.map((para, j) => (
                     <p key={j}>{para}</p>
                   ))}
