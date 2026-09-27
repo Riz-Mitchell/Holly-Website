@@ -417,11 +417,11 @@ function Story() {
   return (
     <section id="my-story" className="scroll-mt-16 pb-12 pt-8 lg:pb-16 lg:pt-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="mx-auto max-w-xl text-left">
+        <div className="mx-auto max-w-xl text-left lg:max-w-[max(36rem,38vw)]">
           <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
             My <em className="text-brand not-italic">story</em>
           </h2>
-          <p className="fade-in text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed">
+          <p className="fade-in text-[15px] lg:text-[clamp(1rem,1.1vw,2.25rem)] text-foreground/70 leading-relaxed">
             <span
               className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground"
               aria-hidden="true"
@@ -495,7 +495,7 @@ function InTheirWords() {
     <section className="pb-24 pt-16 lg:pb-40 lg:pt-[70px]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         {/* Same column as "My story": centred block, left-aligned text. */}
-        <div className="mx-auto max-w-xl text-left">
+        <div className="mx-auto max-w-xl text-left lg:max-w-[max(36rem,38vw)]">
           <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
             In their <em className="text-brand not-italic">words</em>
           </h2>
@@ -509,7 +509,7 @@ function InTheirWords() {
                   />
                 )}
                 <figure className="fade-in">
-                  <blockquote className="text-[clamp(15px,3.5vw,16px)] leading-relaxed text-foreground/70">
+                  <blockquote className="text-[15px] lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
                     <span className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground">
                       {w.quote[0]}
                     </span>
