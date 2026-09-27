@@ -488,7 +488,7 @@ const PHOTOS = [
 function PhotoStrip() {
   return (
     <section aria-label="Photos" className="fade-in">
-      <ul className="no-scrollbar flex snap-x snap-mandatory gap-[13px] overflow-x-auto px-6 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-10">
+      <ul className="no-scrollbar flex snap-x snap-mandatory gap-[13px] overflow-x-auto px-6 scroll-px-6 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-10 lg:scroll-px-10">
         {PHOTOS.map((photo) => (
           <li
             key={photo.alt}
@@ -556,8 +556,10 @@ function InTheirWords() {
           In their <em className="text-brand not-italic">words</em>
         </h2>
 
-        {/* Mobile / tablet: swipeable pager. */}
-        <div className="lg:hidden">
+        {/* Mobile / tablet: swipeable pager. `-mx-6` cancels the padding on
+            the container above so each slide's own `px-6` is the only
+            padding — otherwise the two would stack and double the inset. */}
+        <div className="-mx-6 lg:hidden">
           <div
             ref={trackRef}
             className="flex snap-x snap-mandatory overflow-x-auto"
