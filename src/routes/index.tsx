@@ -144,7 +144,7 @@ function smoothstep(edge0: number, edge1: number, x: number) {
 // Images are fixed per role (not random) so server and client render the same.
 // Desktop overlay text: the same for every role; only the image changes.
 const ROLES_INTRO =
-  "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management.\nToday I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses.\nI'm building a future to inspire the younger generations.\nI'm actively searching for potential acquisitions, partnerships and investment opportunities.\nI look forward to connecting with you!";
+  "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management.Today I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses. I'm building a future to inspire the younger generations. I'm actively searching for potential acquisitions, partnerships and investment opportunities.I look forward to connecting with you!";
 
 const ROLES_INTRO_PARAGRAPHS = ROLES_INTRO.split("\n");
 
@@ -232,9 +232,22 @@ function RoleShowcaseMobile() {
         ))}
       </div>
       <div className="mx-auto flex max-w-sm flex-col gap-[1.1em] px-6 pt-10 text-left text-[15px] leading-relaxed text-foreground/70">
-        {ROLES_INTRO_PARAGRAPHS.map((para) => (
-          <p key={para}>{para}</p>
-        ))}
+        {ROLES_INTRO_PARAGRAPHS.map((para, i) =>
+          i === 0 ? (
+            <p key={para}>
+              <span
+                className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground"
+                aria-hidden="true"
+              >
+                {para[0]}
+              </span>
+              <span className="sr-only">{para[0]}</span>
+              {para.slice(1)}
+            </p>
+          ) : (
+            <p key={para}>{para}</p>
+          ),
+        )}
       </div>
     </div>
   );
@@ -306,9 +319,22 @@ function RoleShowcaseDesktop() {
         <div className="grid h-[70vh] w-full grid-cols-3 items-center gap-12 px-10 2xl:gap-24 2xl:px-16">
           <div className="relative h-full">
             <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 flex-col gap-[1.1em] text-base lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
-              {ROLES_INTRO_PARAGRAPHS.map((para) => (
-                <p key={para}>{para}</p>
-              ))}
+              {ROLES_INTRO_PARAGRAPHS.map((para, i) =>
+                i === 0 ? (
+                  <p key={para}>
+                    <span
+                      className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground"
+                      aria-hidden="true"
+                    >
+                      {para[0]}
+                    </span>
+                    <span className="sr-only">{para[0]}</span>
+                    {para.slice(1)}
+                  </p>
+                ) : (
+                  <p key={para}>{para}</p>
+                ),
+              )}
             </div>
           </div>
           <div />
