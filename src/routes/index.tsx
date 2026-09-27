@@ -205,19 +205,19 @@ function RoleShowcaseMobile() {
         className="flex snap-x snap-mandatory overflow-x-auto"
       >
         {ROLES.map((role) => (
-          <div
-            key={role.title}
-            className="flex w-full shrink-0 snap-center flex-col items-center gap-6 px-6 text-center"
-          >
-            <h2 className="font-display text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight">
-              {role.title}
-            </h2>
-            <img
-              src={role.image}
-              alt={role.alt}
-              loading="lazy"
-              className="aspect-[4/5] w-full max-w-sm rounded-[8px] object-cover"
-            />
+          <div key={role.title} className="w-full shrink-0 snap-center px-6">
+            <div className="relative aspect-[3/4] w-full [clip-path:inset(0_round_8px)]">
+              <img
+                src={role.image}
+                alt={role.alt}
+                loading="lazy"
+                className="h-full w-full rounded-none object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
+              <h2 className="font-display absolute bottom-4 left-4 text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight text-white">
+                {role.title}
+              </h2>
+            </div>
           </div>
         ))}
       </div>
