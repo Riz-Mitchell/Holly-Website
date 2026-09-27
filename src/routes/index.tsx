@@ -488,7 +488,7 @@ const PHOTOS = [
 function PhotoStrip() {
   return (
     <section aria-label="Photos" className="fade-in">
-      <ul className="no-scrollbar flex snap-x snap-mandatory gap-[13px] overflow-x-auto px-3 lg:grid lg:grid-cols-5 lg:overflow-visible">
+      <ul className="no-scrollbar flex snap-x snap-mandatory gap-[13px] overflow-x-auto px-6 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-10">
         {PHOTOS.map((photo) => (
           <li
             key={photo.alt}
@@ -603,7 +603,7 @@ function InTheirWords() {
                 />
               )}
               <figure className="fade-in min-w-0 flex-1 basis-0 text-left">
-                <blockquote className="text-lg leading-relaxed text-foreground/70">
+                <blockquote className="text-base lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
                   <span className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground">
                     {w.quote[0]}
                   </span>
