@@ -1,5 +1,5 @@
 ﻿import { createFileRoute } from "@tanstack/react-router";
-import workImg2 from "@/assets/holly-work-2.webp";
+import workImg2 from "@/assets/holly-work-2.jpeg";
 import roleEntrepreneur from "@/assets/HollyWorking.webp";
 import roleInvestor from "@/assets/HollyWithMentor.webp";
 import roleAthlete from "@/assets/SwimmingPicture.webp";
