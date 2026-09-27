@@ -338,7 +338,7 @@ function RoleShowcaseDesktop() {
       </div>
 
       {/* Titles: normal flow, scrolling with the page. */}
-      <div className="pb-[10vh] pt-[8vh]">
+      <div className="pb-[30vh] pt-[25vh]">
         {ROLES.map((role, i) => (
           <div
             key={role.title}
