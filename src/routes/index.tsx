@@ -550,7 +550,7 @@ function InTheirWords() {
   }, []);
 
   return (
-    <section id="testimonials" className="pb-24 pt-16 lg:pb-40 lg:pt-[70px]">
+    <section id="testimonials" className="pb-16 pt-16 lg:pb-[70px] lg:pt-[70px]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
           In their <em className="text-brand not-italic">words</em>
@@ -688,7 +688,7 @@ function WorkWithMe() {
   return (
     <section
       id="work"
-      className="min-h-screen flex py-28 lg:py-40 border-t border-foreground/10"
+      className="min-h-screen flex pt-16 pb-16 lg:pt-[70px] lg:pb-[70px] border-t border-foreground/10"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 w-full">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-20 gap-8">
