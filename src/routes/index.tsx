@@ -528,26 +528,44 @@ const WORDS = [
   },
 ];
 
+// Mobile / tablet: a swipeable pager, one testimonial per page (same pattern
+// as the Entrepreneur/Investor/Athlete pager). Desktop: all quotes line up in
+// a row, separated by dividers that expand to the row's full height — the
+// same divider, rotated, with the same padding values swapped onto the other
+// axis (the length-trimming margin becomes the between-column gap).
 function InTheirWords() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const i = Math.round(el.scrollLeft / el.clientWidth);
+      setActive(Math.min(Math.max(i, 0), WORDS.length - 1));
+    };
+    onScroll();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <section className="pb-24 pt-16 lg:pb-40 lg:pt-[70px]">
+    <section id="testimonials" className="pb-24 pt-16 lg:pb-40 lg:pt-[70px]">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        {/* Same column as "My story": centred block, left-aligned text. */}
-        <div className="mx-auto max-w-xl text-left lg:max-w-[max(36rem,38vw)]">
-          <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
-            In their <em className="text-brand not-italic">words</em>
-          </h2>
-          <div>
-            {WORDS.map((w, i) => (
-              <Fragment key={i}>
-                {i > 0 && (
-                  <hr
-                    aria-hidden="true"
-                    className="mx-8 my-10 h-0 border-0 border-t-2 border-brand opacity-10"
-                  />
-                )}
-                <figure className="fade-in">
-                  <blockquote className="text-[15px] lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
+        <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
+          In their <em className="text-brand not-italic">words</em>
+        </h2>
+
+        {/* Mobile / tablet: swipeable pager. */}
+        <div className="lg:hidden">
+          <div
+            ref={trackRef}
+            className="flex snap-x snap-mandatory overflow-x-auto"
+          >
+            {WORDS.map((w) => (
+              <div key={w.name} className="w-full shrink-0 snap-center px-6">
+                <figure className="mx-auto max-w-sm text-left">
+                  <blockquote className="text-[15px] leading-relaxed text-foreground/70">
                     <span className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground">
                       {w.quote[0]}
                     </span>
@@ -559,9 +577,46 @@ function InTheirWords() {
                     {w.role}
                   </figcaption>
                 </figure>
-              </Fragment>
+              </div>
             ))}
           </div>
+          <div className="flex justify-center gap-2 pt-6" aria-hidden="true">
+            {WORDS.map((w, i) => (
+              <span
+                key={w.name}
+                className={`h-1.5 rounded-full bg-foreground transition-all duration-500 ${
+                  i === active ? "w-8 opacity-80" : "w-1.5 opacity-20"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: one row, quotes side by side. */}
+        <div className="hidden lg:flex lg:items-stretch">
+          {WORDS.map((w, i) => (
+            <Fragment key={i}>
+              {i > 0 && (
+                <div
+                  aria-hidden="true"
+                  className="my-8 mx-10 w-0 border-0 border-l-2 border-brand opacity-10"
+                />
+              )}
+              <figure className="fade-in min-w-0 flex-1 basis-0 text-left">
+                <blockquote className="text-lg leading-relaxed text-foreground/70">
+                  <span className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground">
+                    {w.quote[0]}
+                  </span>
+                  {w.quote.slice(1)}
+                </blockquote>
+                <figcaption className="mt-3 text-sm text-foreground/60">
+                  <span className="text-foreground">{w.name}</span>
+                  <span className="mx-2">·</span>
+                  {w.role}
+                </figcaption>
+              </figure>
+            </Fragment>
+          ))}
         </div>
       </div>
     </section>

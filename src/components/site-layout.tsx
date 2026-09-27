@@ -10,6 +10,7 @@ import {
 const NAV_LINKS = [
   { href: "/#work", label: "Work With Me" },
   { href: "/#my-story", label: "My Story" },
+  { href: "/#testimonials", label: "Testimonials" },
 ];
 
 // The drawer adds a Home link; on desktop the logo already links home.
