@@ -1,10 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
-import heroPortrait from "@/assets/holly-hero.webp";
-import workImg from "@/assets/holly-work.webp";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import workImg2 from "@/assets/holly-work-2.webp";
+import roleEntrepreneur from "@/assets/HollyWorking.webp";
+import roleInvestor from "@/assets/HollyWithMentor.webp";
+import roleAthlete from "@/assets/SwimmingPicture.webp";
+import photoBees from "@/assets/HollyWorkingWithBeeFrames.webp";
+import photoHive from "@/assets/HollyBuildingAHiveWithBrother.webp";
+import hollyHero from "@/assets/holly-hero.webp";
+
+import hollyPodcast from "@/assets/HollyPodcast.webp";
+import hollyBlueOnStage from "@/assets/HollyBlueOnStage.webp";
+
+import hollyGrayShirtWorking from "@/assets/HollyGrayShirtWorking.webp"
+import hollyOnStage from "@/assets/HollyOnStage.webp"
+
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   Header,
   Footer,
@@ -99,13 +110,18 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   useFadeIn();
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
       <GoogleFontsPreload />
 
       <Header />
       <Hero />
+      <div id="roles">
+        <RoleShowcase />
+      </div>
+      <Story />
+      <PhotoStrip />
+      <InTheirWords />
       <hr className="border-t border-foreground/10" />
-      <About />
       <WorkWithMe />
       {/* <Manifesto /> */}
       {/* <Testimonials /> */}
@@ -115,58 +131,398 @@ function HomePage() {
   );
 }
 
+// Eased 0..1 ramp between two values, so fades start and end gently.
+function smoothstep(edge0: number, edge1: number, x: number) {
+  const t = Math.min(Math.max((x - edge0) / (edge1 - edge0), 0), 1);
+  return t * t * (3 - 2 * t);
+}
+
+// Scroll-driven showcase. The outer block is tall; the inner panel sticks to
+// the viewport while scroll progress swaps between roles, then releases.
+// Images are fixed per role (not random) so server and client render the same.
+// Desktop overlay text: the same for every role; only the image changes.
+const ROLES_INTRO =
+  "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management.\nToday I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses.\nI'm building a future to inspire the younger generations.\nI'm actively searching for potential acquisitions, partnerships and investment opportunities.\nI look forward to connecting with you!";
+
+const ROLES = [
+  {
+    title: "Entrepreneur",
+    text: "[PLACEHOLDER: a sentence or two on what being an entrepreneur looks like day to day.]",
+    image: hollyHero,
+    alt: "Holly working on a product",
+  },
+  {
+    title: "Investor",
+    text: "[PLACEHOLDER: a sentence or two on how Holly invests and what she looks for.]",
+    image: roleEntrepreneur,
+    alt: "Holly with a mentor",
+  },
+  {
+    title: "Athlete",
+    text: "[PLACEHOLDER: a sentence or two on swimming and the early mornings.]",
+    image: roleAthlete,
+    alt: "Holly swimming",
+  },
+];
+
+function RoleShowcase() {
+  return (
+    <>
+      <RoleShowcaseMobile />
+      <RoleShowcaseDesktop />
+    </>
+  );
+}
+
+// Mobile / tablet: the panel pins and swaps one role at a time.
+function RoleShowcaseMobile() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  // Content stays hidden until the panel pins, and fades before it releases,
+  // so it never visibly slides.
+  const [side, setSide] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      const pinned = -rect.top / scrollable;
+      setActive(
+        Math.min(
+          Math.floor(Math.min(Math.max(pinned, 0), 0.999) * ROLES.length),
+          ROLES.length - 1,
+        ),
+      );
+      setSide(smoothstep(0, 0.12, pinned) * smoothstep(0, 0.12, 1 - pinned));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative h-[300vh] lg:hidden" aria-label="Roles">
+      <div className="sticky top-0 h-screen overflow-hidden pt-16">
+        <div className="relative h-full" style={{ opacity: side }}>
+          {ROLES.map((role, i) => (
+            <div
+              key={role.title}
+              aria-hidden={i !== active}
+              className={`absolute inset-0 mx-auto grid max-w-7xl grid-rows-[auto_1fr_auto] items-center gap-6 px-6 pb-16 pt-8 text-center transition-opacity duration-700 ${
+                i === active ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              <p className="order-2 mx-auto max-w-sm text-[15px] leading-relaxed text-foreground/70">
+                {role.text}
+              </p>
+              <h2 className="font-display order-1 text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight">
+                {role.title}
+              </h2>
+              <img
+                src={role.image}
+                alt={role.alt}
+                loading="lazy"
+                className="order-3 mx-auto h-full max-h-[38vh] w-auto max-w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+        <div
+          className="absolute bottom-6 left-0 right-0 flex justify-center gap-2"
+          aria-hidden="true"
+        >
+          {ROLES.map((role, i) => (
+            <span
+              key={role.title}
+              className={`h-1.5 rounded-full bg-foreground transition-all duration-500 ${
+                i === active ? "w-8 opacity-80" : "w-1.5 opacity-20"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Desktop: the titles are ordinary page content and scroll with the page (no
+// pinning, so scrolling is never interrupted). The text and image are a fixed
+// overlay that fades in while the section is on screen and swaps to match the
+// title nearest the middle of the viewport.
+function RoleShowcaseDesktop() {
+  const ref = useRef<HTMLDivElement>(null);
+  const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [active, setActive] = useState(0);
+  const [overlay, setOverlay] = useState(0);
+  const [titleOpacity, setTitleOpacity] = useState<number[]>(
+    ROLES.map((_, i) => (i === 0 ? 1 : 0.12)),
+  );
+
+  useEffect(() => {
+    const onScroll = () => {
+      const vh = window.innerHeight;
+      const mid = vh / 2;
+      let nearest = 0;
+      let nearestDist = Infinity;
+      let firstC = 0;
+      let lastC = 0;
+      const opacities = ROLES.map((_, i) => {
+        const el = titleRefs.current[i];
+        if (!el) return 0.12;
+        const r = el.getBoundingClientRect();
+        const center = r.top + r.height / 2;
+        if (i === 0) firstC = center;
+        if (i === ROLES.length - 1) lastC = center;
+        const dist = Math.abs(center - mid);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearest = i;
+        }
+        return 1 - Math.min(dist / (vh * 0.4), 1) * 0.88;
+      });
+      setTitleOpacity(opacities);
+      setActive(nearest);
+      // Every role owns an equal slice of scroll (half the title spacing either
+      // side of its title). The overlay is fully on between the first and last
+      // title, and fades over half a screen beyond them, so the first and last
+      // images last as long as the middle one.
+      const beyond = Math.max(firstC - mid, mid - lastC, 0);
+      setOverlay(1 - smoothstep(0, vh * 0.5, beyond));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative hidden lg:block" aria-label="Roles">
+      {/* Fixed overlay: static text (left) and image (right). */}
+      <div
+        className="pointer-events-none fixed inset-0 z-10 flex items-center"
+        style={{
+          opacity: overlay,
+          visibility: overlay > 0 ? "visible" : "hidden",
+        }}
+      >
+        <div className="mx-auto grid h-[70vh] w-full max-w-7xl grid-cols-3 items-center gap-12 px-10">
+          <div className="relative h-full">
+            <p className="absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-pre-line text-base leading-relaxed text-foreground/70">
+              {ROLES_INTRO}
+            </p>
+          </div>
+          <div />
+          <div className="relative h-full">
+            {ROLES.map((role, i) => (
+              <img
+                key={role.title}
+                src={role.image}
+                alt={role.alt}
+                aria-hidden={i !== active}
+                className={`absolute inset-0 mx-auto h-full w-auto max-w-full object-cover transition-opacity duration-700 ${
+                  i === active ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Titles: normal flow, scrolling with the page. */}
+      <div className="pb-[30vh] pt-[25vh]">
+        {ROLES.map((role, i) => (
+          <div
+            key={role.title}
+            ref={(el) => {
+              titleRefs.current[i] = el;
+            }}
+            className="flex h-[50vh] items-center justify-center"
+          >
+            <h2
+              className="font-display text-center text-[clamp(3rem,5.5vw,6.5rem)] leading-none tracking-tight"
+              style={{ opacity: titleOpacity[i] }}
+            >
+              {role.title}
+            </h2>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-[95vh] flex items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-20 lg:pt-40 lg:pb-32 overflow-hidden"
+      className="relative flex flex-col items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl lg:max-h-lvh px-6 lg:px-10 grid lg:grid-cols-12 gap-4 lg:gap-12 lg:gap-x-24 items-center">
-        <div className="lg:col-span-7 animate-rise">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
-            Entrepreneur · Investor · Athlete
-          </p>
-          <h1 className="font-display text-[clamp(2.75rem,13vw,4.25rem)] lg:text-[clamp(4rem,6vw,7rem)] leading-[0.88] tracking-tight pb-4">
+      <div className="relative flex w-full min-h-[calc(100svh-8rem)] lg:min-h-[calc(100svh-11rem)] flex-col items-center justify-center pb-12">
+        <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center animate-rise">
+          <h1 className="font-display text-[clamp(2.75rem,12vw,4.25rem)] lg:text-[clamp(4rem,6.5vw,7.5rem)] leading-[0.92] tracking-tight pb-4">
             <AnimatedText
               baseDelay={0}
               stagger={0.1}
               segments={[
-                { type: "text", content: "Building the next" },
-                { type: "em", content: "chapter", pause: 0.25 },
+                { type: "text", content: "Building for the long term," },
+                { type: "em", content: "not the quick exit.", pause: 0.25 },
               ]}
             />
           </h1>
 
-          <div className="mt-10 flex flex-wrap gap-4">
-            <div className="fade-in" style={{ transitionDelay: "1.5s" }}>
-              <a
-                href="#contact"
-                className="group inline-flex items-center gap-3 rounded-full bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
-              >
-                Let's Connect
-                <RightArrowSvg width={16} height={16} />
-              </a>
-            </div>
-            <div className="fade-in" style={{ transitionDelay: "1.75s" }}>
-              <a
-                href="/about"
-                className="inline-flex items-center gap-3 rounded-full border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
-              >
-                My Story
-              </a>
-            </div>
-          </div>
+          <figure
+            className="fade-in mx-auto mt-6 max-w-2xl lg:mt-8"
+            style={{ transitionDelay: "1.4s" }}
+          >
+            <blockquote className="font-display text-[clamp(1.05rem,4vw,1.25rem)] lg:text-[1.4rem] leading-snug text-foreground/80">
+              “There is no such thing as a quantum leap. There is only dogged
+              persistence.”
+            </blockquote>
+            <figcaption className="mt-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
+              — James Dyson
+            </figcaption>
+          </figure>
         </div>
 
-        <div className="lg:col-span-5 relative">
-          <div className="py-20 relative overflow-hidden flex justify-center">
+        <div
+          className="fade-in absolute bottom-6 left-0 right-0 flex justify-center"
+          style={{ transitionDelay: "1.7s" }}
+        >
+          <a
+            href="#roles"
+            aria-label="Scroll down"
+            className="animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
+          >
+            <RightArrowSvg width={20} height={20} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const STORY_TEXT =
+  "I grew up on a Mornington Peninsula farm watching my parents build a business, where my siblings and I helped out from an early age. A former competitive swimmer who balanced national-level training with school, I graduated in 2023 and chose to enter the workforce directly rather than attend university. After working at Rebel Sport, family health challenges led me back to join and support our family business full-time in 2025. Today, I focus on growth through business acquisitions, learning from experienced mentors, and identifying new opportunities to scale.";
+
+function Story() {
+  return (
+    <section id="my-story" className="scroll-mt-16 pb-12 pt-8 lg:pb-16 lg:pt-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="mx-auto max-w-xl text-left">
+          <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
+            My <em className="text-brand not-italic">story</em>
+          </h2>
+          <p className="fade-in text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed">
+            <span
+              className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground"
+              aria-hidden="true"
+            >
+              {STORY_TEXT[0]}
+            </span>
+            <span className="sr-only">{STORY_TEXT[0]}</span>
+            {STORY_TEXT.slice(1)}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Row of five equal squares running nearly edge to edge, like YC's photo strip:
+// 12px side padding, ~13px gaps, 8px corners. Swap the photos here.
+const PHOTOS = [
+  { src: hollyPodcast, alt: "Holly as a baby" },
+  { src: hollyBlueOnStage, alt: "Holly on stage by herself" },
+  { src: hollyGrayShirtWorking, alt: "Holly working at desk" },
+  { src: hollyOnStage, alt: "Holly on stage with people" },
+  { src: photoHive, alt: "Holly building a hive with her brother" },
+];
+
+function PhotoStrip() {
+  return (
+    <section aria-label="Photos" className="fade-in">
+      <ul className="no-scrollbar flex snap-x snap-mandatory gap-[13px] overflow-x-auto px-3 lg:grid lg:grid-cols-5 lg:overflow-visible">
+        {PHOTOS.map((photo) => (
+          <li
+            key={photo.alt}
+            className="w-[62vw] max-w-[22rem] shrink-0 snap-start lg:w-auto lg:max-w-none"
+          >
             <img
-              src={heroPortrait}
-              alt="Portrait of Holly Winkels"
-              width="100%"
-              height="100%"
-              className="w-3/4 h-auto object-cover contrast-110"
+              src={photo.src}
+              alt={photo.alt}
+              loading="lazy"
+              className="aspect-square w-full rounded-[8px] object-cover"
             />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+const WORDS = [
+  {
+    quote:
+      "“Holly is incredibly driven and intentional about where she’s heading. What stands out to me is her willingness to learn, seek out people who are ahead of her and then actually put that knowledge into action. She has a clear vision for what she wants to build and the determination to make it happen.”",
+    name: "Mariecris",
+    role: "Abundance Property",
+  },
+  {
+    quote:
+      "“Working with Holly has been such a great experience. She brings a clear vision, takes initiative and is genuinely open to ideas and feedback. She has a strong understanding of what she wants to achieve and isn’t afraid to ask questions, make decisions and take action.”",
+    name: "Elsie",
+    role: "New Co Digital",
+  },
+  {
+    quote:
+      "“Holly is one of those people who naturally takes initiative. She’s professional, reliable and genuinely invested in understanding business and building strong relationships. What stands out most is her drive — when Holly sets her mind to something, she follows through.”",
+    name: "Martia",
+    role: "@pilatesalbury",
+  },
+];
+
+function InTheirWords() {
+  return (
+    <section className="pb-24 pt-16 lg:pb-40 lg:pt-[70px]">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        {/* Same column as "My story": centred block, left-aligned text. */}
+        <div className="mx-auto max-w-xl text-left">
+          <h2 className="fade-in font-display mb-10 text-center text-[clamp(2.25rem,10vw,3.25rem)] leading-none tracking-tight lg:mb-14 lg:text-[clamp(3rem,4vw,5rem)]">
+            In their <em className="text-brand not-italic">words</em>
+          </h2>
+          <div>
+            {WORDS.map((w, i) => (
+              <Fragment key={i}>
+                {i > 0 && (
+                  <hr
+                    aria-hidden="true"
+                    className="mx-8 my-10 h-0 border-0 border-t-2 border-brand opacity-10"
+                  />
+                )}
+                <figure className="fade-in">
+                  <blockquote className="text-[clamp(15px,3.5vw,16px)] leading-relaxed text-foreground/70">
+                    <span className="font-display mr-1 inline-block align-baseline text-[3.5em] leading-[0.7] text-foreground">
+                      {w.quote[0]}
+                    </span>
+                    {w.quote.slice(1)}
+                  </blockquote>
+                  <figcaption className="mt-3 text-sm text-foreground/60">
+                    <span className="text-foreground">{w.name}</span>
+                    <span className="mx-2">·</span>
+                    {w.role}
+                  </figcaption>
+                </figure>
+              </Fragment>
+            ))}
           </div>
         </div>
       </div>
@@ -210,65 +566,6 @@ function Marquee() {
             {item}
           </span>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function About() {
-  return (
-    <section
-      id="about"
-      className="min-h-[95vh] flex py-28 lg:py-40 items-center"
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-12 gap-16 lg:gap-x-24 items-center">
-        <div className="fade-in order-2 lg:order-1 lg:col-span-5">
-          <img
-            src={workImg}
-            alt="Holly Winkels working"
-            loading="lazy"
-            width={1024}
-            height={1024}
-            className="w-full aspect-square object-cover"
-          />
-        </div>
-        <div className="order-1 lg:order-2 lg:col-span-7 ap-8">
-          <p className="fade-in text-xs uppercase tracking-[0.3em] text-brand mb-3 sm:mb-6">
-            — About
-          </p>
-          <h2
-            className="fade-in font-display text-[clamp(2.25rem,10vw,3.25rem)] lg:text-[clamp(3rem,4vw,5rem)] leading-none tracking-tight"
-            style={{ transitionDelay: "0.1s" }}
-          >
-            I chose a
-            <br />
-            <em className="text-brand">different path.</em>
-          </h2>
-          <div
-            className="fade-in space-y-6 w-full max-w-xl text-[clamp(15px,3.5vw,16px)] text-foreground/70 leading-relaxed mt-10"
-            style={{ transitionDelay: "0.25s" }}
-          >
-            <p>
-	            I've never been particularly interested in doing things the 
-              usual way. When I finished school I chose business over university and 
-              pursued swimming at a national level. Now I'm building 
-              businesses, exploring acquisitions and looking for opportunities 
-              to build and grow.
-            </p>
-            {/* <p className="font-display italic text-2xl text-foreground">
-              That's what I work on. The person, then the business.
-            </p> */}
-          </div>
-          <div className="fade-in mt-8" style={{ transitionDelay: "0.35s" }}>
-            <a
-              href="/about"
-              className="link-underline [--underline-trim:0.18em] inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-foreground/50 transition hover:text-foreground/80"
-            >
-              Read My Story
-              <RightArrowSvg width={12} height={12} />
-            </a>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -547,7 +844,7 @@ function Testimonials() {
           style={{ transitionDelay: "0.1s" }}
         >
           What
-          <br/> 
+          <br />
           people are <em className="text-brand">saying</em>
         </h2>
 
@@ -572,4 +869,3 @@ function Testimonials() {
     </section>
   );
 }
-

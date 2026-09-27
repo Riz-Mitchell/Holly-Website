@@ -8,9 +8,8 @@ import {
 } from "@/components/ui/sheet";
 
 const NAV_LINKS = [
-  { href: "/#about", label: "About" },
   { href: "/#work", label: "Work With Me" },
-  { href: "/about", label: "My Story" },
+  { href: "/#my-story", label: "My Story" },
 ];
 
 // The drawer adds a Home link; on desktop the logo already links home.
@@ -96,7 +95,7 @@ export function Header() {
         {/* Desktop: Contact stays inline in the header. */}
         <a
           href="/#contact"
-          className="hidden md:inline-flex rounded-full text-xs uppercase tracking-[0.18em] px-4 py-2 bg-brand text-brand-foreground hover:opacity-60 transition duration-200"
+          className="hidden md:inline-flex rounded-full text-xs uppercase tracking-[0.18em] px-4 py-2 bg-black text-white hover:opacity-60 transition duration-200"
         >
           Contact
         </a>
@@ -138,7 +137,7 @@ export function Header() {
               <a
                 href="/#contact"
                 onClick={() => setMenuOpen(false)}
-                className="flex w-full items-center justify-center rounded-full bg-brand text-brand-foreground px-4 py-4 text-xs uppercase tracking-[0.18em] hover:opacity-60 transition duration-200"
+                className="flex w-full items-center justify-center rounded-full bg-black text-white px-4 py-4 text-xs uppercase tracking-[0.18em] hover:opacity-60 transition duration-200"
               >
                 Contact
               </a>
@@ -206,6 +205,36 @@ export function RightArrowSvg({
     >
       <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
     </svg>
+  );
+}
+
+type ButtonProps = {
+  href: string;
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+};
+
+export function PrimaryButton({ href, children, icon }: ButtonProps) {
+  return (
+    <a
+      href={href}
+      className="group inline-flex items-center gap-3 rounded-full bg-brand text-brand-foreground px-7 py-4 text-sm uppercase tracking-[0.18em] hover:opacity-60 duration-200"
+    >
+      {children}
+      {icon}
+    </a>
+  );
+}
+
+export function SecondaryButton({ href, children, icon }: ButtonProps) {
+  return (
+    <a
+      href={href}
+      className="inline-flex items-center gap-3 rounded-full border border-foreground/30 px-7 py-4 text-sm uppercase tracking-[0.18em] hover:bg-foreground hover:text-background transition duration-500"
+    >
+      {children}
+      {icon}
+    </a>
   );
 }
 

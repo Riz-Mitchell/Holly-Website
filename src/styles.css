@@ -82,13 +82,21 @@
   --palette-ocean-blue-brand-soft: oklch(0.75 0.09 216);
   --palette-ocean-blue-accent: oklch(0.55 0.09 216);
   --palette-ocean-blue-ring: oklch(0.55 0.09 216);
+
+  /* Palette: emerald (based on #00a070) */
+  --palette-emerald-brand: oklch(0.6244 0.1345 163.25); /* #00a070 */
+  --palette-emerald-brand-foreground: oklch(0.08 0 0);
+  --palette-emerald-brand-strong: oklch(0.42 0.1 163.25);
+  --palette-emerald-brand-soft: oklch(0.75 0.11 163.25);
+  --palette-emerald-accent: oklch(0.54 0.12 163.25);
+  --palette-emerald-ring: oklch(0.54 0.12 163.25);
 }
 
 :root {
   --radius: 0.25rem;
 
   /* Brand palette: white base, black text */
-  --background: oklch(1 0 0);
+  --background: #fbf7f0; /* Sequoia cream */
   --foreground: oklch(0.08 0 0);
   --ink: oklch(0.08 0 0);
 
@@ -104,15 +112,15 @@
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.35 0 0);
 
-  /* ---- Active palette: change "ocean-blue" to "earthy-teal" / "forest-green"
+  /* ---- Active palette: change "emerald" to "ocean-blue" / "earthy-teal" / "forest-green"
      (or a new palette added above) to swap the whole site's brand color. ---- */
-  --accent: var(--palette-ocean-blue-accent);
+  --accent: var(--palette-emerald-accent);
   --accent-foreground: oklch(0.08 0 0);
-  --brand: var(--palette-ocean-blue-brand);
-  --brand-foreground: var(--palette-ocean-blue-brand-foreground);
-  --brand-strong: var(--palette-ocean-blue-brand-strong);
-  --brand-soft: var(--palette-ocean-blue-brand-soft);
-  --ring: var(--palette-ocean-blue-ring);
+  --brand: var(--palette-emerald-brand);
+  --brand-foreground: var(--palette-emerald-brand-foreground);
+  --brand-strong: var(--palette-emerald-brand-strong);
+  --brand-soft: var(--palette-emerald-brand-soft);
+  --ring: var(--palette-emerald-ring);
 
   --destructive: oklch(0.55 0.22 28);
   --destructive-foreground: oklch(1 0 0);
@@ -121,7 +129,7 @@
 }
 
 .dark {
-  --background: oklch(1 0 0);
+  --background: #fbf7f0; /* Sequoia cream */
   --foreground: oklch(0.08 0 0);
 }
 
@@ -261,6 +269,26 @@
   @media (max-width: 1023px) {
     .animate-marquee {
       animation-duration: 18s;
+    }
+  }
+
+  /* Slow up/down bob for the scroll caret. The caret is rotated 90deg, so the
+     bob is applied to the parent via translate (independent of rotate). */
+  @keyframes bob {
+    0%,
+    100% {
+      translate: 0 -3px;
+    }
+    50% {
+      translate: 0 3px;
+    }
+  }
+  .animate-bob {
+    animation: bob 4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-bob {
+      animation: none;
     }
   }
 
