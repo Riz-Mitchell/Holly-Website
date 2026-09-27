@@ -15,7 +15,6 @@ import hollyOnStage from "@/assets/HollyOnStage.webp"
 
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
-import { HalftoneCmyk } from "@paper-design/shaders-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import {
   Header,
@@ -179,93 +178,63 @@ function RoleShowcase() {
   );
 }
 
-// Mobile / tablet: the panel pins and swaps one role at a time.
+// Mobile / tablet: a swipeable pager. Each page holds one role's title and
+// image, swiped by the user (native horizontal scroll-snap, no scroll-driven
+// pinning or fades). The intro text is static beneath the pager and never
+// changes.
 function RoleShowcaseMobile() {
-  const ref = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  // Content stays hidden until the panel pins, and fades before it releases,
-  // so it never visibly slides.
-  const [side, setSide] = useState(0);
 
   useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
     const onScroll = () => {
-      const el = ref.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      const pinned = -rect.top / scrollable;
-      setActive(
-        Math.min(
-          Math.floor(Math.min(Math.max(pinned, 0), 0.999) * ROLES.length),
-          ROLES.length - 1,
-        ),
-      );
-      setSide(smoothstep(0, 0.12, pinned) * smoothstep(0, 0.12, 1 - pinned));
+      const i = Math.round(el.scrollLeft / el.clientWidth);
+      setActive(Math.min(Math.max(i, 0), ROLES.length - 1));
     };
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <div ref={ref} className="relative h-[300vh] lg:hidden" aria-label="Roles">
-      <div className="sticky top-0 h-screen overflow-hidden pt-16">
-        <div
-          className="relative flex h-full flex-col gap-6 px-6 pb-16 pt-8 text-center"
-          style={{ opacity: side }}
-        >
-          <div className="grid shrink-0 place-items-center">
-            {ROLES.map((role, i) => (
-              <h2
-                key={role.title}
-                aria-hidden={i !== active}
-                className={`font-display col-start-1 row-start-1 text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight transition-opacity duration-700 ${
-                  i === active ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                {role.title}
-              </h2>
-            ))}
-          </div>
-          <div className="relative min-h-0 flex-1 overflow-hidden rounded-[8px]">
-            {ROLES.map((role, i) => (
-              <HalftoneCmyk
-                key={role.title}
-                image={role.image}
-                fit="cover"
-                colorBack="#fbf7f0"
-                role="img"
-                aria-label={role.alt}
-                aria-hidden={i !== active}
-                className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${
-                  i === active ? "opacity-20" : "opacity-0"
-                }`}
-              />
-            ))}
-            <div className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col gap-[1.1em] px-4 text-left text-[15px] leading-relaxed text-foreground/70">
-              {ROLES_INTRO_PARAGRAPHS.map((para) => (
-                <p key={para}>{para}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div
-          className="absolute bottom-6 left-0 right-0 flex justify-center gap-2"
-          aria-hidden="true"
-        >
-          {ROLES.map((role, i) => (
-            <span
-              key={role.title}
-              className={`h-1.5 rounded-full bg-foreground transition-all duration-500 ${
-                i === active ? "w-8 opacity-80" : "w-1.5 opacity-20"
-              }`}
+    <div className="fade-in lg:hidden" aria-label="Roles">
+      <div
+        ref={trackRef}
+        className="flex snap-x snap-mandatory overflow-x-auto"
+      >
+        {ROLES.map((role) => (
+          <div
+            key={role.title}
+            className="flex w-full shrink-0 snap-center flex-col items-center gap-6 px-6 text-center"
+          >
+            <h2 className="font-display text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight">
+              {role.title}
+            </h2>
+            <img
+              src={role.image}
+              alt={role.alt}
+              loading="lazy"
+              className="aspect-[4/5] w-full max-w-sm rounded-[8px] object-cover"
             />
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center gap-2 pt-6" aria-hidden="true">
+        {ROLES.map((role, i) => (
+          <span
+            key={role.title}
+            className={`h-1.5 rounded-full bg-foreground transition-all duration-500 ${
+              i === active ? "w-8 opacity-80" : "w-1.5 opacity-20"
+            }`}
+          />
+        ))}
+      </div>
+      <div className="mx-auto flex max-w-sm flex-col gap-[1.1em] px-6 pt-10 text-left text-[15px] leading-relaxed text-foreground/70">
+        {ROLES_INTRO_PARAGRAPHS.map((para) => (
+          <p key={para}>{para}</p>
+        ))}
       </div>
     </div>
   );
