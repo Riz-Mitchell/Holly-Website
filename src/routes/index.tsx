@@ -15,6 +15,7 @@ import hollyOnStage from "@/assets/HollyOnStage.webp"
 
 import rightArrow from "@/assets/caret-right.svg";
 import paperPlane from "@/assets/paper-plane-tilt.svg";
+import { HalftoneCmyk } from "@paper-design/shaders-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import {
   Header,
@@ -232,13 +233,15 @@ function RoleShowcaseMobile() {
           </div>
           <div className="relative min-h-0 flex-1 overflow-hidden rounded-[8px]">
             {ROLES.map((role, i) => (
-              <img
+              <HalftoneCmyk
                 key={role.title}
-                src={role.image}
-                alt={i === active ? role.alt : ""}
+                image={role.image}
+                fit="cover"
+                colorBack="#fbf7f0"
+                role="img"
+                aria-label={role.alt}
                 aria-hidden={i !== active}
-                loading="lazy"
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${
                   i === active ? "opacity-20" : "opacity-0"
                 }`}
               />
