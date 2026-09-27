@@ -271,7 +271,7 @@ export function CTA() {
   return (
     <section
       id="contact"
-      className="min-h-screen flex py-32 lg:py-48 bg-brand text-brand-foreground"
+      className="flex min-h-[80vh] items-center py-16 lg:py-24 bg-brand text-brand-foreground"
     >
       <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center">
         <p className="fade-in text-xs uppercase tracking-[0.3em] mb-3 sm:mb-6 opacity-80">
