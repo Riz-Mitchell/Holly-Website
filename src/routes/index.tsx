@@ -8,7 +8,7 @@ import photoHive from "@/assets/HollyBuildingAHiveWithBrother.webp";
 import hollyHero from "@/assets/holly-hero.webp";
 
 import hollyPodcast from "@/assets/HollyPodcast.webp";
-import hollyBlueOnStage from "@/assets/HollyBlueOnStage.webp";
+import hollyOnSwing from "@/assets/hollyOnSwing.JPG";
 
 import hollyGrayShirtWorking from "@/assets/HollyGrayShirtWorking.webp"
 import hollyOnStage from "@/assets/HollyOnStage.webp"
@@ -458,7 +458,7 @@ function Story() {
 // 12px side padding, ~13px gaps, 8px corners. Swap the photos here.
 const PHOTOS = [
   { src: photoHive, alt: "Holly as a baby" },
-  { src: hollyBlueOnStage, alt: "Holly on stage by herself" },
+  { src: hollyOnSwing, alt: "Holly on a swing as a kid" },
   { src: hollyGrayShirtWorking, alt: "Holly working at desk" },
   { src: hollyOnStage, alt: "Holly on stage with people" },
   { src: hollyPodcast, alt: "Holly podcasting" },
