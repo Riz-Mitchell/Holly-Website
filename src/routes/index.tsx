@@ -116,11 +116,20 @@ function HomePage() {
       <GoogleFontsPreload />
 
       <Header />
-      <Hero />
-      <div id="roles">
-        <RoleShowcase />
+      {/* Mobile: Roles, then Hero, then Story. Desktop: Hero, Roles, Story
+          (unchanged). `contents` at lg drops the flex reordering so desktop
+          falls back to plain source order. */}
+      <div className="flex flex-col lg:contents">
+        <div className="order-2 lg:order-none">
+          <Hero />
+        </div>
+        <div id="roles" className="order-1 lg:order-none">
+          <RoleShowcase />
+        </div>
+        <div className="order-3 lg:order-none">
+          <Story />
+        </div>
       </div>
-      <Story />
       <PhotoStrip />
       <InTheirWords />
       <hr className="border-t border-foreground/10" />
@@ -199,14 +208,17 @@ function RoleShowcaseMobile() {
   }, []);
 
   return (
-    <div className="fade-in lg:hidden" aria-label="Roles">
+    <div
+      className="fade-in pt-[calc(4rem_+_env(safe-area-inset-top)_+_1.5rem)] lg:hidden"
+      aria-label="Roles"
+    >
       <div
         ref={trackRef}
         className="flex snap-x snap-mandatory overflow-x-auto"
       >
         {ROLES.map((role) => (
           <div key={role.title} className="w-full shrink-0 snap-center px-6">
-            <div className="relative aspect-[3/4] w-full [clip-path:inset(0_round_8px)]">
+            <div className="relative aspect-[3/4] w-full [clip-path:inset(0_round_2rem)]">
               <img
                 src={role.image}
                 alt={role.alt}
@@ -414,10 +426,19 @@ function Hero() {
           className="fade-in absolute bottom-6 left-0 right-0 flex justify-center"
           style={{ transitionDelay: "1.7s" }}
         >
+          {/* Mobile: Roles now comes right after Hero, so the caret points
+              past it to My Story instead. Desktop keeps pointing to Roles. */}
+          <a
+            href="#my-story"
+            aria-label="Scroll down"
+            className="lg:hidden animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
+          >
+            <RightArrowSvg width={20} height={20} />
+          </a>
           <a
             href="#roles"
             aria-label="Scroll down"
-            className="animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
+            className="hidden lg:inline-flex animate-bob rotate-90 text-foreground/70 hover:text-foreground transition-colors"
           >
             <RightArrowSvg width={20} height={20} />
           </a>
@@ -477,7 +498,7 @@ function PhotoStrip() {
               src={photo.src}
               alt={photo.alt}
               loading="lazy"
-              className="aspect-square w-full rounded-[8px] object-cover"
+              className="aspect-square w-full rounded-[2rem] object-cover"
             />
           </li>
         ))}
