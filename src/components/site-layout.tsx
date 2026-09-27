@@ -76,7 +76,7 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/10 bg-background pt-[env(safe-area-inset-top)] lg:bg-background/70 lg:backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 h-16 flex items-center justify-between">
+      <div className="px-6 lg:px-10 h-16 flex items-center justify-between">
         <a href="/" className="font-display text-xl tracking-tight">
           Holly Winkels
         </a>
@@ -152,7 +152,7 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="border-t border-foreground/10 py-12 pb-[calc(3rem_+_env(safe-area-inset-bottom))]">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
         <p className="font-display text-2xl">Holly Winkels</p>
         <p className="text-xs uppercase tracking-[0.18em] text-foreground/50 text-center">
           © {new Date().getFullYear()} Holly Winkels. All rights reserved.

@@ -314,9 +314,9 @@ function RoleShowcaseDesktop() {
           visibility: overlay > 0 ? "visible" : "hidden",
         }}
       >
-        <div className="mx-auto grid h-[70vh] w-full max-w-7xl grid-cols-3 items-center gap-12 px-10">
+        <div className="grid h-[70vh] w-full grid-cols-3 items-center gap-12 px-10 2xl:gap-24 2xl:px-16">
           <div className="relative h-full">
-            <p className="absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-pre-line text-base leading-relaxed text-foreground/70">
+            <p className="absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-pre-line text-base lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
               {ROLES_INTRO}
             </p>
           </div>
@@ -348,7 +348,7 @@ function RoleShowcaseDesktop() {
             className="flex h-[50vh] items-center justify-center"
           >
             <h2
-              className="font-display text-center text-[clamp(3rem,5.5vw,6.5rem)] leading-none tracking-tight"
+              className="font-display text-center text-[clamp(3rem,6vw,14rem)] leading-none tracking-tight"
               style={{ opacity: titleOpacity[i] }}
             >
               {role.title}
@@ -367,8 +367,8 @@ function Hero() {
       className="relative flex flex-col items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
     >
       <div className="relative flex w-full min-h-[calc(100svh-8rem)] lg:min-h-[calc(100svh-11rem)] flex-col items-center justify-center pb-12">
-        <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center animate-rise">
-          <h1 className="font-display text-[clamp(2.75rem,12vw,4.25rem)] lg:text-[clamp(4rem,6.5vw,7.5rem)] leading-[0.92] tracking-tight pb-4">
+        <div className="w-full px-6 lg:px-10 text-center animate-rise">
+          <h1 className="font-display text-[clamp(2.75rem,12vw,4.25rem)] lg:text-[clamp(4rem,7vw,16rem)] leading-[0.92] tracking-tight pb-4">
             <AnimatedText
               baseDelay={0}
               stagger={0.1}
@@ -380,14 +380,14 @@ function Hero() {
           </h1>
 
           <figure
-            className="fade-in mx-auto mt-6 max-w-2xl lg:mt-8"
+            className="fade-in mx-auto mt-6 max-w-2xl lg:mt-8 lg:max-w-[max(42rem,45vw)]"
             style={{ transitionDelay: "1.4s" }}
           >
-            <blockquote className="font-display text-[clamp(1.05rem,4vw,1.25rem)] lg:text-[1.4rem] leading-snug text-foreground/80">
+            <blockquote className="font-display text-[clamp(1.05rem,4vw,1.25rem)] lg:text-[clamp(1.4rem,1.7vw,4rem)] leading-snug text-foreground/80">
               “There is no such thing as a quantum leap. There is only dogged
               persistence.”
             </blockquote>
-            <figcaption className="mt-3 text-xs uppercase tracking-[0.3em] text-foreground/60">
+            <figcaption className="mt-3 text-xs lg:text-[clamp(0.75rem,0.75vw,1.5rem)] uppercase tracking-[0.3em] text-foreground/60">
               — James Dyson
             </figcaption>
           </figure>
