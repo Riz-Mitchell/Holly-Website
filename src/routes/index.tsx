@@ -146,6 +146,8 @@ function smoothstep(edge0: number, edge1: number, x: number) {
 const ROLES_INTRO =
   "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management.\nToday I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses.\nI'm building a future to inspire the younger generations.\nI'm actively searching for potential acquisitions, partnerships and investment opportunities.\nI look forward to connecting with you!";
 
+const ROLES_INTRO_PARAGRAPHS = ROLES_INTRO.split("\n");
+
 const ROLES = [
   {
     title: "Entrepreneur",
@@ -211,29 +213,42 @@ function RoleShowcaseMobile() {
   return (
     <div ref={ref} className="relative h-[300vh] lg:hidden" aria-label="Roles">
       <div className="sticky top-0 h-screen overflow-hidden pt-16">
-        <div className="relative h-full" style={{ opacity: side }}>
-          {ROLES.map((role, i) => (
-            <div
-              key={role.title}
-              aria-hidden={i !== active}
-              className={`absolute inset-0 mx-auto grid max-w-7xl grid-rows-[auto_1fr_auto] items-center gap-6 px-6 pb-16 pt-8 text-center transition-opacity duration-700 ${
-                i === active ? "opacity-100" : "pointer-events-none opacity-0"
-              }`}
-            >
-              <p className="order-2 mx-auto max-w-sm text-[15px] leading-relaxed text-foreground/70">
-                {role.text}
-              </p>
-              <h2 className="font-display order-1 text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight">
+        <div
+          className="relative flex h-full flex-col gap-6 px-6 pb-16 pt-8 text-center"
+          style={{ opacity: side }}
+        >
+          <div className="grid shrink-0 place-items-center">
+            {ROLES.map((role, i) => (
+              <h2
+                key={role.title}
+                aria-hidden={i !== active}
+                className={`font-display col-start-1 row-start-1 text-center text-[clamp(2.75rem,12vw,4.25rem)] leading-none tracking-tight transition-opacity duration-700 ${
+                  i === active ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 {role.title}
               </h2>
+            ))}
+          </div>
+          <div className="relative min-h-0 flex-1 overflow-hidden rounded-[8px]">
+            {ROLES.map((role, i) => (
               <img
+                key={role.title}
                 src={role.image}
-                alt={role.alt}
+                alt={i === active ? role.alt : ""}
+                aria-hidden={i !== active}
                 loading="lazy"
-                className="order-3 mx-auto h-full max-h-[38vh] w-auto max-w-full object-cover"
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                  i === active ? "opacity-20" : "opacity-0"
+                }`}
               />
+            ))}
+            <div className="absolute inset-x-0 top-1/2 mx-auto flex max-w-sm -translate-y-1/2 flex-col gap-[1.1em] px-4 text-left text-[15px] leading-relaxed text-foreground/70">
+              {ROLES_INTRO_PARAGRAPHS.map((para) => (
+                <p key={para}>{para}</p>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
         <div
           className="absolute bottom-6 left-0 right-0 flex justify-center gap-2"
@@ -318,9 +333,11 @@ function RoleShowcaseDesktop() {
       >
         <div className="grid h-[70vh] w-full grid-cols-3 items-center gap-12 px-10 2xl:gap-24 2xl:px-16">
           <div className="relative h-full">
-            <p className="absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-pre-line text-base lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
-              {ROLES_INTRO}
-            </p>
+            <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 flex-col gap-[1.1em] text-base lg:text-[clamp(1rem,1.1vw,2.25rem)] leading-relaxed text-foreground/70">
+              {ROLES_INTRO_PARAGRAPHS.map((para) => (
+                <p key={para}>{para}</p>
+              ))}
+            </div>
           </div>
           <div />
           <div className="relative h-full">
