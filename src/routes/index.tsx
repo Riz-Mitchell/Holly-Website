@@ -393,9 +393,9 @@ function Hero() {
   return (
     <section
       id="top"
-      className="relative flex flex-col items-center pt-[calc(8rem_+_env(safe-area-inset-top))] pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
+      className="relative flex flex-col items-center pt-16 pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
     >
-      <div className="relative flex w-full min-h-[calc(100svh-8rem)] lg:min-h-[calc(100svh-11rem)] flex-col items-center justify-center pb-12">
+      <div className="relative flex w-full flex-col items-center justify-center pb-6 lg:min-h-[calc(100svh-11rem)] lg:pb-12">
         <div className="w-full px-6 lg:px-10 text-center animate-rise">
           <h1 className="font-display text-[clamp(2.75rem,12vw,4.25rem)] lg:text-[clamp(4rem,7vw,16rem)] leading-[0.92] tracking-tight pb-4">
             <AnimatedText
@@ -422,23 +422,16 @@ function Hero() {
           </figure>
         </div>
 
+        {/* Mobile: Hero no longer sits first (Roles does), so there's no
+            caret pointing down here anymore. Desktop keeps it. */}
         <div
-          className="fade-in absolute bottom-6 left-0 right-0 flex justify-center"
+          className="fade-in absolute bottom-6 left-0 right-0 hidden justify-center lg:flex"
           style={{ transitionDelay: "1.7s" }}
         >
-          {/* Mobile: Roles now comes right after Hero, so the caret points
-              past it to My Story instead. Desktop keeps pointing to Roles. */}
-          <a
-            href="#my-story"
-            aria-label="Scroll down"
-            className="lg:hidden animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
-          >
-            <RightArrowSvg width={20} height={20} />
-          </a>
           <a
             href="#roles"
             aria-label="Scroll down"
-            className="hidden lg:inline-flex animate-bob rotate-90 text-foreground/70 hover:text-foreground transition-colors"
+            className="animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
           >
             <RightArrowSvg width={20} height={20} />
           </a>
