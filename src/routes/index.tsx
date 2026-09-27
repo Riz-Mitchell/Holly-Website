@@ -101,7 +101,9 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       { rel: "canonical", href: "/" },
-      { rel: "icon", href: "/favicon.svg" },
+      { rel: "icon", href: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   component: HomePage,
@@ -440,11 +442,11 @@ function Story() {
 // Row of five equal squares running nearly edge to edge, like YC's photo strip:
 // 12px side padding, ~13px gaps, 8px corners. Swap the photos here.
 const PHOTOS = [
-  { src: hollyPodcast, alt: "Holly as a baby" },
+  { src: photoHive, alt: "Holly as a baby" },
   { src: hollyBlueOnStage, alt: "Holly on stage by herself" },
   { src: hollyGrayShirtWorking, alt: "Holly working at desk" },
   { src: hollyOnStage, alt: "Holly on stage with people" },
-  { src: photoHive, alt: "Holly building a hive with her brother" },
+  { src: hollyPodcast, alt: "Holly podcasting" },
 ];
 
 function PhotoStrip() {
