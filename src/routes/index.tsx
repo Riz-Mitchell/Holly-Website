@@ -503,21 +503,21 @@ function PhotoStrip() {
 const WORDS = [
   {
     quote:
-      "“Holly is incredibly driven and intentional about where she’s heading. What stands out to me is her willingness to learn, seek out people who are ahead of her and then actually put that knowledge into action. She has a clear vision for what she wants to build and the determination to make it happen.”",
-    name: "Mariecris",
-    role: "Abundance Property",
-  },
-  {
-    quote:
-      "“Working with Holly has been such a great experience. She brings a clear vision, takes initiative and is genuinely open to ideas and feedback. She has a strong understanding of what she wants to achieve and isn’t afraid to ask questions, make decisions and take action.”",
-    name: "Elsie",
+      "Working with Holly has been an absolute pleasure! She's incredibly driven, creative and always open to others ideas and feedback! I look forward to continuing to do business with her and seeing where our relationship takes us!”",
+    name: "Elisa",
     role: "New Co Digital",
   },
   {
     quote:
+      "“Working with Holly has been such a great experience. She brings a clear vision, takes initiative and is genuinely open to ideas and feedback. She has a strong understanding of what she wants to achieve and isn’t afraid to ask questions, make decisions and take action.”",
+    name: "Placeholder2 Name",
+    role: "Placeholder2 Business",
+  },
+  {
+    quote:
       "“Holly is one of those people who naturally takes initiative. She’s professional, reliable and genuinely invested in understanding business and building strong relationships. What stands out most is her drive — when Holly sets her mind to something, she follows through.”",
-    name: "Martia",
-    role: "@pilatesalbury",
+    name: "Placeholder3 Name",
+    role: "Placeholder3 Business",
   },
 ];
 
