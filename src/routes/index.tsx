@@ -503,7 +503,7 @@ function PhotoStrip() {
 const WORDS = [
   {
     quote:
-      "Working with Holly has been an absolute pleasure! She's incredibly driven, creative and always open to others ideas and feedback! I look forward to continuing to do business with her and seeing where our relationship takes us!”",
+      "“Working with Holly has been an absolute pleasure! She's incredibly driven, creative and always open to others ideas and feedback! I look forward to continuing to do business with her and seeing where our relationship takes us!”",
     name: "Elisa",
     role: "New Co Digital",
   },
