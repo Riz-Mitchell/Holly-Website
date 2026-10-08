@@ -116,20 +116,11 @@ function HomePage() {
       <GoogleFontsPreload />
 
       <Header />
-      {/* Mobile: Roles, then Hero, then Story. Desktop: Hero, Roles, Story
-          (unchanged). `contents` at lg drops the flex reordering so desktop
-          falls back to plain source order. */}
-      <div className="flex flex-col lg:contents">
-        <div className="order-2 lg:order-none">
-          <Hero />
-        </div>
-        <div id="roles" className="order-1 lg:order-none">
-          <RoleShowcase />
-        </div>
-        <div className="order-3 lg:order-none">
-          <Story />
-        </div>
+      <div id="roles">
+        <RoleShowcase />
       </div>
+      <Hero />
+      <Story />
       <PhotoStrip />
       <InTheirWords />
       <hr className="border-t border-foreground/10" />
@@ -422,14 +413,14 @@ function Hero() {
           </figure>
         </div>
 
-        {/* Mobile: Hero no longer sits first (Roles does), so there's no
-            caret pointing down here anymore. Desktop keeps it. */}
+        {/* Mobile: no caret here. Desktop keeps it, pointing at My Story now
+            that Roles sits above Hero. */}
         <div
           className="fade-in absolute bottom-6 left-0 right-0 hidden justify-center lg:flex"
           style={{ transitionDelay: "1.7s" }}
         >
           <a
-            href="#roles"
+            href="#my-story"
             aria-label="Scroll down"
             className="animate-bob inline-flex rotate-90 text-foreground/70 hover:text-foreground transition-colors"
           >
