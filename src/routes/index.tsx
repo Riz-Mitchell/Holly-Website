@@ -153,7 +153,7 @@ function smoothstep(edge0: number, edge1: number, x: number) {
 // Images are fixed per role (not random) so server and client render the same.
 // Desktop overlay text: the same for every role; only the image changes.
 const ROLES_INTRO =
-  "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management.Today I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses. I'm building a future to inspire the younger generations. I'm actively searching for potential acquisitions, partnerships and investment opportunities.I look forward to connecting with you!";
+  "I've spent my whole life surrounded by business and performance most recently scaling a multimillion dollar family enterprise and placing it under management. Today I work with ambitious entrepreneurs to unlock wealth opportunities and help build scalable businesses. I'm building a future to inspire the younger generations. I'm actively searching for potential acquisitions, partnerships and investment opportunities. I look forward to connecting with you!";
 
 const ROLES_INTRO_PARAGRAPHS = ROLES_INTRO.split("\n");
 
