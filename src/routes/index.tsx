@@ -116,6 +116,7 @@ function HomePage() {
       <GoogleFontsPreload />
 
       <Header />
+      <DesktopIntroPhoto />
       {/* Mobile: Roles, then Hero, then Story. Desktop: Hero, Roles, Story
           (unchanged). `contents` at lg drops the flex reordering so desktop
           falls back to plain source order. */}
@@ -386,6 +387,34 @@ function RoleShowcaseDesktop() {
         ))}
       </div>
     </div>
+  );
+}
+
+// Desktop-only cover section, shown before the quote section. Same visual
+// treatment as the mobile role cards: a photo with a bottom gradient fade
+// and the title overlaid bottom-left.
+function DesktopIntroPhoto() {
+  return (
+    <section
+      aria-label="Holly Winkels"
+      className="fade-in hidden lg:block lg:h-screen lg:px-10 lg:pb-10 lg:pt-[calc(4rem_+_env(safe-area-inset-top)_+_2.5rem)]"
+    >
+      <div className="relative h-full w-full overflow-hidden rounded-[2rem]">
+        <img
+          src={hollyOnStage}
+          alt="Holly Winkels"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
+        <h1 className="font-display absolute bottom-8 left-8 text-[clamp(4rem,7vw,16rem)] leading-[0.92] tracking-tight text-white">
+          <AnimatedText
+            baseDelay={0}
+            stagger={0.1}
+            segments={[{ type: "text", content: "Holly Winkels" }]}
+          />
+        </h1>
+      </div>
+    </section>
   );
 }
 
