@@ -117,20 +117,11 @@ function HomePage() {
 
       <Header />
       <DesktopIntroPhoto />
-      {/* Mobile: Roles, then Hero, then Story. Desktop: Hero, Roles, Story
-          (unchanged). `contents` at lg drops the flex reordering so desktop
-          falls back to plain source order. */}
-      <div className="flex flex-col lg:contents">
-        <div className="order-2 lg:order-none">
-          <Hero />
-        </div>
-        <div id="roles" className="order-1 lg:order-none">
-          <RoleShowcase />
-        </div>
-        <div className="order-3 lg:order-none">
-          <Story />
-        </div>
+      <Hero />
+      <div id="roles">
+        <RoleShowcase />
       </div>
+      <Story />
       <PhotoStrip />
       <InTheirWords />
       <hr className="border-t border-foreground/10" />
@@ -210,7 +201,7 @@ function RoleShowcaseMobile() {
 
   return (
     <div
-      className="fade-in pt-[calc(4rem_+_env(safe-area-inset-top)_+_1.5rem)] lg:hidden"
+      className="fade-in pt-8 lg:hidden"
       aria-label="Roles"
     >
       <div
@@ -390,23 +381,24 @@ function RoleShowcaseDesktop() {
   );
 }
 
-// Desktop-only cover section, shown before the quote section. Same visual
-// treatment as the mobile role cards: a photo with a bottom gradient fade
-// and the title overlaid bottom-left.
+// Cover section, shown before the quote section on mobile and desktop. Same
+// visual treatment as the mobile role cards: a photo with a bottom gradient
+// fade and the title overlaid bottom-left. Portrait card on mobile, full
+// screen on desktop.
 function DesktopIntroPhoto() {
   return (
     <section
       aria-label="Holly Winkels"
-      className="fade-in hidden lg:block lg:h-screen lg:px-10 lg:pb-10 lg:pt-[calc(4rem_+_env(safe-area-inset-top)_+_2.5rem)]"
+      className="fade-in px-6 pt-[calc(4rem_+_env(safe-area-inset-top)_+_1.5rem)] lg:h-screen lg:px-10 lg:pb-10 lg:pt-[calc(4rem_+_env(safe-area-inset-top)_+_2.5rem)]"
     >
-      <div className="relative h-full w-full overflow-hidden rounded-[2rem]">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full">
         <img
           src={hollyOnStage}
           alt="Holly Winkels"
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/50 to-transparent" />
-        <h1 className="font-display absolute bottom-8 left-8 text-[clamp(4rem,7vw,16rem)] leading-[0.92] tracking-tight text-white">
+        <h1 className="font-display absolute bottom-4 left-4 text-[clamp(2.25rem,10vw,3.25rem)] leading-[0.92] tracking-tight text-white lg:bottom-8 lg:left-8 lg:text-[clamp(4rem,7vw,16rem)]">
           <AnimatedText
             baseDelay={0}
             stagger={0.1}
@@ -422,7 +414,7 @@ function Hero() {
   return (
     <section
       id="top"
-      className="relative flex flex-col items-center pt-16 pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
+      className="relative flex flex-col items-center pt-12 pb-8 lg:pt-44 lg:pb-8 overflow-hidden"
     >
       <div className="relative flex w-full flex-col items-center justify-center pb-6 lg:min-h-[calc(100svh-11rem)] lg:pb-12">
         <div className="w-full px-6 lg:px-10 text-center animate-rise">
@@ -451,8 +443,7 @@ function Hero() {
           </figure>
         </div>
 
-        {/* Mobile: Hero no longer sits first (Roles does), so there's no
-            caret pointing down here anymore. Desktop keeps it. */}
+        {/* Desktop only: scroll-down caret. */}
         <div
           className="fade-in absolute bottom-6 left-0 right-0 hidden justify-center lg:flex"
           style={{ transitionDelay: "1.7s" }}
@@ -538,9 +529,9 @@ const WORDS = [
   },
   {
     quote:
-      "“Working with Holly has been such a great experience. She brings a clear vision, takes initiative and is genuinely open to ideas and feedback. She has a strong understanding of what she wants to achieve and isn’t afraid to ask questions, make decisions and take action.”",
-    name: "Placeholder2 Name",
-    role: "Placeholder2 Business",
+      "“Holly is such a genuine person who truly cares about the people around her. She's full of creative ideas, takes initiative and has a clear vision for what she wants to achieve. I really admire the way she puts her mind to things and follows through with them.”",
+    name: "Martia",
+    role: "@Pilates Albury",
   },
   {
     quote:
